@@ -1,0 +1,14 @@
+8f1ddede6d4df954ee725f91e62e7b55 *DESCRIPTION
+92bab79d9cd9dbb764f95083c516d76e *NAMESPACE
+58cd9c974fa65484f1bae2e049543db7 *R/od.2.R
+60faac3d21e99ac3ee3fd210ad798f15 *R/odr.R
+43cc73c43355e0fead330c09e20fdeb4 *R/power.2.R
+9500fbc51585e3d7b381dd7c116b0598 *build/vignette.rds
+8bc4436adaf0a94ccd920071ad2deaef *inst/doc/odr.R
+0213d07b02d8b8bf6d5e9d2c553d03c6 *inst/doc/odr.Rmd
+3604ff6e0f3c6fd4ff50954719005670 *inst/doc/odr.html
+845c5189adc2bb7d7d917a25b5124339 *man/od.2.Rd
+b81b64f830a3c6d183a7b343efc7c7e9 *man/odr.Rd
+13d886719bdea34b8146a01a0c0437c6 *man/power.2.Rd
+d41d8cd98f00b204e9800998ecf8427e *tests/testthat.R
+0213d07b02d8b8bf6d5e9d2c553d03c6 *vignettes/odr.Rmd
