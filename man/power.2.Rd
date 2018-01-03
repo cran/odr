@@ -2,60 +2,60 @@
 % Please edit documentation in R/power.2.R
 \name{power.2}
 \alias{power.2}
-\title{Required budget, power, MDES, required sample size calculation for two-level GRTs}
+\title{Required budget (and/or sample size), power, MDES calculation for two-level CRTs}
 \usage{
 power.2(cost.model = TRUE, expr = NULL, constraint = NULL,
-  sig.level = 0.05, two.tailed = TRUE, es = NULL, n = NULL, J = NULL,
-  p = NULL, m = NULL, power = NULL, q = NULL, ICC = NULL,
-  R12 = NULL, R22 = NULL, c1 = NULL, c2 = NULL, c1t = NULL,
-  c2t = NULL, eslim = NULL, mlim = NULL, powerlim = NULL, Jlim = NULL)
+  sig.level = 0.05, two.tailed = TRUE, es = NULL, power = NULL,
+  m = NULL, n = NULL, J = NULL, p = NULL, icc = NULL, r12 = NULL,
+  r22 = NULL, q = NULL, c1 = NULL, c2 = NULL, c1t = NULL,
+  c2t = NULL, eslim = NULL, powerlim = NULL, Jlim = NULL, mlim = NULL,
+  rounded = TRUE)
 }
 \arguments{
 \item{cost.model}{logical, perform power analyses accommodating costs and budget
 (e.g., required budget for desired power, power/MDES under fixed budget)
 if TRUE, perform conventional power analyses
-(e.g., required sample size, power, or MDES) if FALSE; default is TRUE.}
+(e.g., required sample size, power, or MDES calculation) if FALSE; default is TRUE.}
 
-\item{expr}{returns from the function of \code{\link{od.2}}; default is NULL;
-if \code{expr} is specified, parameter values of \code{ICC},
-\code{R12}, \code{R22},
+\item{expr}{returned object from function \code{\link{od.2}}; default is NULL;
+if \code{expr} is specified, parameter values of \code{icc},
+\code{r12}, \code{r22},
 \code{c1}, \code{c2}, \code{c1t}, \code{c2t}, \code{n}, and \code{p}
-used or solved in the function of \code{\link{od.2}} will
+used or solved in function \code{\link{od.2}} will
 be passed to the current function;
- only the values of \code{n} and \code{p} that specified or solved in
- the function of \code{\link{od.2}} can be overwritten
+only the values of \code{n} and \code{p} that specified or solved in
+function \code{\link{od.2}} can be overwritten
 if \code{constraint} is specified.}
 
-\item{constraint}{specify the values of n and/or p to overwrite those
+\item{constraint}{specify the constrained values of \code{n}
+and/or \code{p} in list format to overwrite those
 from \code{expr}; default is NULL.}
 
 \item{sig.level}{significance level or type I error rate, default is 0.05.}
 
-\item{two.tailed}{logical; TRUE for two-tailed tests,
-FALSE for one-tailed tests; default is TRUE.}
+\item{two.tailed}{logical; perform two-tailed tests if TRUE,
+perform one-tailed tests if FALSE; default is TRUE.}
 
 \item{es}{effect size.}
+
+\item{power}{statistical power.}
+
+\item{m}{total budget.}
 
 \item{n}{the average level-1 sample size per level-2 unit.}
 
 \item{J}{the level-2 sample size across treatment conditions.}
 
-\item{p}{the proportion of level-2 units assigned to treatment.}
+\item{p}{the proportion of level-2 clusters/units assigned to treatment.}
 
-\item{m}{total budget.}
-
-\item{power}{statistical power.}
-
-\item{q}{the number of level-2 covariates, default is 0.}
-
-\item{ICC}{the unconditional intraclass correlation coefficient in population or in
+\item{icc}{the unconditional intraclass correlation coefficient (ICC) in population or in
 each treatment condition.}
 
-\item{R12}{the proportion level-1 variance explained by covariates in population or in
-each treatment condition.}
+\item{r12}{the proportion of level-1 variance explained by covariates.}
 
-\item{R22}{the proportion level-2 variance explained by covariates in population or in
-each treatment condition.}
+\item{r22}{the proportion of level-2 variance explained by covariates.}
+
+\item{q}{the number of level-2 covariates.}
 
 \item{c1}{the cost of sampling one level-1 unit in control condition.}
 
@@ -65,71 +65,100 @@ each treatment condition.}
 
 \item{c2t}{the cost of sampling one level-2 unit in treatment condition.}
 
-\item{eslim}{the range to search the root of effect size (es) numerically,
-default is c(0, 5)}
+\item{eslim}{the range for searching the root of effect size (\code{es}) numerically,
+default is c(0, 5).}
 
-\item{mlim}{the range for searching the root of budget (m) numerically,
-default is the costs for sampling same number of level-2 units across treatment conditions
+\item{powerlim}{the range for searching the root of power (\code{power}) numerically,
+default is c(1e-10, 1 - 1e-10).}
+
+\item{Jlim}{the range for searching the root of level-2 sample size (\code{J}) numerically,
+default is c(4, 10e10)}
+
+\item{mlim}{the range for searching the root of budget (\code{m}) numerically,
+default is the costs sampling \code{Jlim} level-2 units across treatment conditions
 or c(4 * Jcost
 , 10e10 * Jcost), with Jcost = ((1 - p) * (c1 * n + c2) + p * (c1t * n + c2t))}
 
-\item{powerlim}{the range for searching the root of power (power) numerically,
-default is c(1e-10, 1 - 1e-10)}
-
-\item{Jlim}{the range for searching the root of level-2 sample size (J) numerically,
-default is c(4, 10e10)}
+\item{rounded}{logical; round \code{n} and \code{p} that are from functions \code{od.2}
+to integer and two decimal places, respectively if TRUE,
+no rounding if FALSE; default is TRUE.}
 }
 \value{
-Required budget / sample size, statistical power, or MDES
-    depending on the parameter specification.
+Required budget (and/or required level-2 sample size), statistical power, or MDES
+    depending on the specification of parameters.
     The function also returns the function name, design type,
-    and the list of parameters used in the calculation.
+    and parameters used in the calculation.
 }
 \description{
 This function can calculate required budget for desired power,
-    power or the minimum detectable effect size (MDES) under fixed budget
-    for two-level group randomized trials (GRTs).
+    power or minimum detectable effect size (MDES) under fixed budget
+    for two-level cluster randomized trials (CRTs).
     It also can perform conventional power analyses
     (e.g., required sample size, power, and MDES calculation).
 }
 \examples{
 # unconstrained optimal design
-myod1 <- od.2(ICC = 0.2, R12 = 0.5, R22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50)
+myod1 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50)
 myod1$out   # n = 8.9, p = 0.33
 
 # ------- power analyses by default considering costs and budget -------
-mym <- power.2(expr = myod1, es = 0.3, q = 1, power = 0.8)
-mym$out  # m =1702
+# required budget and sample size
+mym.1 <- power.2(expr = myod1, es = 0.3, q = 1, power = 0.8)
+mym.1$out  # m = 1702, J = 59.0
+mym.1$par  # parameters and their values used for the function
+# or equivalently, specify every argument in the function
+mym.1 <- power.2(es = 0.3, power = 0.8, icc = 0.2,
+                 c1 = 1, c2 = 5, c1t = 1, c2t = 50,
+                  r12 = 0.5, r22 = 0.5, n = 9, p = 0.33, q = 1)
+# required budget and sample size with constrained p
+mym.2 <- power.2(expr = myod1, es = 0.3, q = 1, power = 0.8,
+               constraint = list(p = 0.5))
+mym.2$out  # m = 1913, J = 52.4
+# required budget and sample size with constrained p and n
+mym.3 <- power.2(expr = myod1, es = 0.3, q = 1, power = 0.8,
+               constraint = list(p = 0.5, n = 20))
+mym.3$out  # m = 2086, J = 43.9
 
+# Power calculation
+mypower <- power.2(expr = myod1, q = 1, es = 0.3, m = 1702)
+mypower$out  # power = 0.80
+# Power calculation under constrained p (p = 0.5)
+mypower.1 <- power.2(expr = myod1, q = 1, es = 0.3, m = 1702,
+               constraint = list(p = 0.5))
+mypower.1$out  # power = 0.75
+
+# MDES calculation
 mymdes <- power.2(expr = myod1, q = 1, power = 0.80, m = 1702)
 mymdes$out  # MDES = 0.30
 
-mypower <- power.2(expr = myod1, q = 1, es = 0.3, m = 1702)
-mypower$out  # power = 0.80
 
 # ------- conventional power analyses with cost.model = FALSE-------
 # Required J
-myJ1 <- power.2(cost.model = FALSE, expr = myod1, es = 0.3, q = 1, power = 0.8)
-myJ1$out  # J = 59
-myJ1$par  # parameters and their values used for the function
+myJ <- power.2(cost.model = FALSE, expr = myod1, es = 0.3, q = 1, power = 0.8)
+myJ$out  # J = 59.0
+myJ$par  # parameters and their values used for the function
+# or equivalently, specify every argument in the function
+myJ <- power.2(cost.model = FALSE, es = 0.3, power = 0.8, icc = 0.2,
+                  r12 = 0.5, r22 = 0.5, n = 9, p = 0.33, q = 1)
 
-# or equivalently, specify every arguments in the function
-myJ1.1 <- power.2(cost.model = FALSE, es = 0.3, power = 0.8, ICC = 0.2,
-                  R12 = 0.5, R22 = 0.5, n = 9, p = 0.33, q = 1)
-myJ1.1$out
-
-# power
+# Power calculation
  mypower1 <- power.2(cost.model = FALSE, expr = myod1, J = 59, es = 0.3, q = 1)
 mypower1$out  # power = 0.80
 
-# MDES
+# MDES calculation
 mymdes1 <- power.2(cost.model = FALSE, expr = myod1, J = 59, power = 0.8, q = 1)
 mymdes1$out  # es = 0.30
 
 
 }
 \references{
-Shen, Z., & Kelcey, B. (under review). Optimal design of cluster
-    randomized trials under condition- and unit-specific cost structures.
-    2018 American Educational Research Association (AERA) annual conference.
+(1) Shen, Z., & Kelcey, B. (2018, April). Optimal design of cluster
+  randomized trials under condition- and unit-specific cost structures. Roundtable
+  discussion to be presented at American Educational Research Association (AERA)
+  annual conference; (2) Shen, Z., & Kelcey, B. (under review).
+  Optimal sample allocation under unequal costs in cluster-randomized trials.
+  Journal of Educational and Behavioral Statistics. (3) Shen, Z.(in progress).
+  Using optimal sample allocation to
+  improve design efficiency for multilevel randomized trials.
+  (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
 }

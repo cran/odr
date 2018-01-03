@@ -5,7 +5,7 @@
 \alias{odr}
 \alias{odr-package}
 \title{Optimal Design and Statistical Power of
-    Cost-Efficient Multilevel Randomized Trials in R}
+    Multilevel Randomized Trials}
 \description{
 This package is to help researchers design cost-efficient and
     well-powered multilevel randomized trials by solving optimal sample allocation
@@ -13,7 +13,8 @@ This package is to help researchers design cost-efficient and
 }
 \details{
 This package has two categorical functions for each type of
-    the multilevel randomized trials and they are
+    multilevel randomized trials.
+    The two categorical functions are
     'od' and 'power'. The 'od' function can
     calculate the optimal sample allocation with and without constraints for multilevel
     randomized trials under fixed budget and cost structure that minimizes
@@ -24,6 +25,8 @@ This package has two categorical functions for each type of
     power, minimum detectable effect size (MDES) or power under fixed budget.
     It also can perform conventional power analyses
     (e.g., required sample size, power, MDES calculation).
+    There is an additional function 're' to compare
+    the relative efficiency to two studies.
 }
 \author{
 Zuchao "William" Shen
