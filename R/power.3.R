@@ -1,4 +1,4 @@
-#' Required budget (and/or sample size), power, MDES calculation for three-level CRTs
+#' Budget and/or sample size, power, MDES calculation for three-level CRTs
 #'
 #' @description This function can calculate required budget for desired power,
 #'     power or minimum detectable effect size (MDES) under fixed budget
@@ -20,19 +20,19 @@
 #' @param constraint specify the constrained values of \code{p}, \code{n},
 #'     and/or \code{J} in list format to overwrite those
 #'     from \code{expr}; default is NULL.
-#' @param K the level-3 sample size across treatment conditions.
+#' @param K the total level-3 sample size.
 #' @param p the proportion of level-3 clusters/units assigned to treatment.
 #' @param q the number of covariates at level 3.
 #' @param Klim the range for searching the root of level-3 sample size (\code{K}) numerically,
-#'     default is c(4, 10e10)
+#'     default value is c(4, 1e+10)
 #' @param mlim the range for searching the root of budget (\code{m}) numerically,
-#'     default is the costs sampling \code{Klim} level-3 units across treatment conditions
-#'     or c(4 * Kcost, 10e10 * Kcost) with Kcost =
+#'     default value is the costs sampling \code{Klim} level-3 units across treatment conditions
+#'     or c(4 * Kcost, 1e+10 * Kcost) with Kcost =
 #'     ((1 - p) * (c1 * n * J + c2 * J + c3) + p * (c1t * n * J + c2t * J + c3t))
 #' @param rounded logical; round the values of \code{p}, \code{n}/\code{J} that are
 #'     from functions \code{\link{od.3}}
 #'     to two decimal places and integer, respectively if TRUE,
-#'     no rounding if FALSE; default is TRUE.
+#'     otherwise no rounding; default value is TRUE.
 #'
 #' @return Required budget (and/or required level-3 sample size), statistical power, or MDES
 #'     depending on the specification of parameters.
@@ -42,91 +42,92 @@
 #' @export power.3
 #'
 #' @references
-#'   (1) Shen, Z., & Kelcey, B. (under review).
+#'   Shen, Z., & Kelcey, B. (revise & resubmit).
 #'   Optimal sample allocation under unequal costs in cluster-randomized trials.
-#'   Journal of Educational and Behavioral Statistics. (2) Shen, Z.(in progress).
+#'   Journal of Educational and Behavioral Statistics.
+#'
+#'   Shen, Z. (in progress).
 #'   Using optimal sample allocation to
-#'   improve design efficiency for multilevel randomized trials.
+#'   improve statistical precision and design efficiency for multilevel randomized trials
 #'   (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
 #'
 #' @examples
 #' # unconstrained optimal design
-#' myod1 <- od.3(icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5,
+#'   myod1 <- od.3(icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5,
 #'               c1 = 1, c2 = 5, c3 = 25, c1t = 1, c2t = 50, c3t = 250)
-#' myod1$out # output  # n = 7.9, J = 3.2, p = 0.28
+#'   myod1$out # output  # n = 7.9, J = 3.2, p = 0.28
 #'
 #' # ------- power analyses by default considering costs and budget -------
 #' # required budget and sample size
-#' mym.1 <- power.3(expr = myod1, es = 0.3, q = 1, power = 0.8)
-#' mym.1$out  # m = 7319, K = 44.4
-#' mym.1$par  # parameters and their values used for the function
+#'   mym.1 <- power.3(expr = myod1, d = 0.2, q = 1, power = 0.8)
+#'   mym.1$out  # m = 16032, K = 97.3
+#'   #mym.1$par  # parameters and their values used for the function
 #' # or equivalently, specify every argument in the function
-#' mym.1 <- power.3(es = 0.3, power = 0.8, q = 1,
+#'   mym.1 <- power.3(d = 0.2, power = 0.8, q = 1,
 #'                  icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5,
 #'                  c1 = 1, c2 = 5, c3 = 25, c1t = 1, c2t = 50, c3t = 250,
 #'                  n = 8, J = 3, p = 0.28)
 #' # required budget and sample size with constrained p
-#' mym.2 <- power.3(expr = myod1, es = 0.3, q = 1, power = 0.8,
+#'   mym.2 <- power.3(expr = myod1, d = 0.2, q = 1, power = 0.8,
 #'                  constraint = list(p = 0.5))
-#' mym.2$out  # m = 8843, K = 36.2
+#'   mym.2$out  # m = 19239, K = 78.8
 #' # required budget and sample size with constrained p and J
-#' mym.3 <- power.3(expr = myod1, es = 0.3, q = 1, power = 0.8,
+#'   mym.3 <- power.3(expr = myod1, d = 0.2, q = 1, power = 0.8,
 #'                  constraint = list(p = 0.5, J = 20))
-#' mym.3$out  # m = 18775, K = 22.2
+#'   mym.3$out  # m = 39774, K = 46.9
 #'
 #' # Power calculation
-#' mypower <- power.3(expr = myod1, q = 1, es = 0.3, m = 7319)
-#' mypower$out  # power = 0.80
+#'   mypower <- power.3(expr = myod1, q = 1, d = 0.2, m = 16032)
+#'   mypower$out  # power = 0.80
 #' # Power calculation under constrained p (p = 0.5)
-#' mypower.1 <- power.3(expr = myod1, q = 1, es = 0.3, m = 7319,
+#'   mypower.1 <- power.3(expr = myod1, q = 1, d = 0.2, m = 16032,
 #'                  constraint = list(p = 0.5))
-#' mypower.1$out  # power = 0.72
+#'   mypower.1$out  # power = 0.72
 #'
 #' # MDES calculation
-#' mymdes <- power.3(expr = myod1, q = 1, power = 0.80, m = 7319)
-#' mymdes$out  # MDES = 0.30
+#'   mymdes <- power.3(expr = myod1, q = 1, power = 0.80, m = 16032)
+#'   mymdes$out  # d = 0.20
 #'
 #'
 #' # ------- conventional power analyses with cost.model = FALSE-------
 #' # Required sample size
-#' myK <- power.3(cost.model = FALSE, expr = myod1, es = 0.3, q = 1, power = 0.8)
-#' myK$out  # K = 44.4
-#' myK$par  # parameters and their values used for the function
+#'   myK <- power.3(cost.model = FALSE, expr = myod1, d = 0.2, q = 1, power = 0.8)
+#'   myK$out  # K = 97.3
+#'   #myK$par  # parameters and their values used for the function
 #' # or equivalently, specify every argument in the function
-#' myK <- power.3(cost.model = FALSE, es = 0.3, power = 0.8, q = 1,
+#'   myK <- power.3(cost.model = FALSE, d = 0.2, power = 0.8, q = 1,
 #'                   icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5,
 #'                   n = 8, J = 3, p = 0.28)
 #'
 #' # Power calculation
-#'  mypower1 <- power.3(cost.model = FALSE, expr = myod1, K = 44, es = 0.3, q = 1)
-#'  mypower1$out  # power = 0.80
+#'   mypower1 <- power.3(cost.model = FALSE, expr = myod1, K = 97, d = 0.2, q = 1)
+#'   mypower1$out  # power = 0.80
 #'
 #' # MDES calculation
-#' mymdes1 <- power.3(cost.model = FALSE, expr = myod1, K = 44, power = 0.8, q = 1)
-#' mymdes1$out  # es = 0.30
-#'
+#'   mymdes1 <- power.3(cost.model = FALSE, expr = myod1, K = 97, power = 0.8, q = 1)
+#'   mymdes1$out  # d = 0.20
 #'
 power.3 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
                     sig.level = 0.05, two.tailed = TRUE,
-                    es = NULL, power = NULL, m = NULL,
+                    d = NULL, power = NULL, m = NULL,
                     n = NULL, J = NULL, K = NULL, p = NULL,
                     icc2 = NULL, icc3 = NULL,
                     r12 = NULL, r22 = NULL, r32 = NULL, q = NULL,
                     c1 = NULL, c2 = NULL, c3 = NULL,
                     c1t = NULL, c2t = NULL, c3t = NULL,
-                    eslim = NULL, powerlim = NULL, Klim = NULL, mlim = NULL,
+                    dlim = NULL, powerlim = NULL, Klim = NULL, mlim = NULL,
                     rounded = TRUE) {
   funName <- "power.3"
   designType <- "three-level CRTs"
-  if (cost.model) {
-    if (sum(sapply(list(m, es, power), is.null)) != 1)
-      stop("exactly one of m, es, and power must be NULL
+  if (cost.model == TRUE) {
+    if (sum(sapply(list(m, d, power), is.null)) != 1)
+      stop("exactly one of 'm', 'd', and 'power' must be NULL
            when cost.model is TRUE")
     if (!is.null(K))
       stop("'K' must be NULL when cost.model is TRUE")
   } else {
-    if (sum(sapply(list(K, es, power), is.null)) != 1)
-      stop("exactly one of K, es, and power must be NULL
+    if (sum(sapply(list(K, d, power), is.null)) != 1)
+      stop("exactly one of 'K', 'd', and 'power' must be NULL
            when cost.model is FALSE")
     if (!is.null(m))
       stop("'m' must be NULL when cost.model is FALSE")
@@ -152,7 +153,7 @@ power.3 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
       c1t <- expr$par$c1t
       c2t <- expr$par$c2t
       c3t <- expr$par$c3t
-      if (rounded) {
+      if (rounded == TRUE) {
         n <- round(expr$out$n, 0)
         J <- round(expr$out$J, 0)
         p <- round(expr$out$p, 2)
@@ -174,12 +175,12 @@ power.3 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
     stop("'constraint' must be limited to 'n', 'J' and/or 'p'")
   if (!is.null(constraint$n)) {
     if(NumberCheck(constraint$n) || constraint$n <= 0)
-      stop("constrained 'n' must be numeric in (0, 10e10)")
+      stop("constrained 'n' must be numeric with n > 0")
     n <- constraint$n
   }
   if (!is.null(constraint$J)) {
     if(NumberCheck(constraint$J) || constraint$J <= 0)
-      stop("constrained 'J' must be numeric in (0, 10e10)")
+      stop("constrained 'J' must be numeric with J > 0")
     J <- constraint$J
   }
   if (!is.null(constraint$p)) {
@@ -195,7 +196,7 @@ power.3 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
   if (sum(sapply(list(r12, r22, r32), function(x) {
     NumberCheck(x) || any(0 > x | x >= 1)
   })) >= 1) stop("'r12', 'r22', 'r32' must be numeric in [0, 1)")
-  if (cost.model){
+  if (cost.model == TRUE){
     if (sum(sapply(list(c1, c2, c3, c1t, c2t, c3t), function(x) {
       NumberCheck(x) || x < 0})) >= 1)
       stop("'c1', 'c2', 'c3', 'c1t', 'c2t', 'c3t' must be numeric in [0, Inf)")
@@ -203,33 +204,30 @@ power.3 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
       stop("'m' must be numeric in [0, Inf)")
   }
   if (NumberCheck(q) | q < 0)
-    stop("'q' must be numeric in [0, 10e3]")
+    stop("'q' must be numeric in [0, 1e+3]")
   if (NumberCheck(n) || n <= 0)
-    stop("'n' must be numeric in (0, 10e10)")
+    stop("'n' must be numeric with n > 0")
   if (NumberCheck(J) || J <= 0)
-    stop("'J' must be numeric in (0, 10e10)")
-  if (NumberCheck(es) || any(0 > es | es > 5))
-    stop("'es' must be numeric in [0, 5],
+    stop("'J' must be numeric with J > 0")
+  if (NumberCheck(d) || any(0 > d | d > 5))
+    stop("'d' must be numeric in [0, 5],
          please transfer negative effect size to positive one if needed")
-  if (r32 > 0 && q == 0)
-    stop("'q' must be q >= 1 when r32 != 0")
   par <- list(cost.model = cost.model,
               sig.level = sig.level,
               two.tailed = two.tailed,
-              es = es, icc2 = icc2, icc3 = icc3,
+              d = d, icc2 = icc2, icc3 = icc3,
               r12 = r12, r22 = r22, r32 = r32,
               c1 = c1, c2 = c2, c3 = c3,
               c1t = c1t, c2t = c2t, c3t = c3t,
               n = n, J = J, K = K, p = p,
               q = q, m = m, power = power)
-  tside <- ifelse(two.tailed, 2, 1)
-  if (cost.model) {
-    Kcost <- ((1 - p) * (c1 * n * J + c2 * J + c3) + p * (c1t * n * J + c2t * J + c3t))
-    if (two.tailed) {
-      p.expr <- quote({
+  tside <- ifelse(two.tailed == TRUE, 2, 1)
+  if (cost.model == TRUE) {
+    if (two.tailed == TRUE) {
+      pwr.expr <- quote({
         K <- m / ((1 - p) * (c1 * n * J + c2 * J + c3)
                   + p * (c1t * n * J + c2t * J + c3t));
-        lambda <- es * sqrt(p * (1 - p) * K) /
+        lambda <- d * sqrt(p * (1 - p) * K) /
           sqrt(icc3 * (1 - r32) + icc2 * (1 - r22) / J + (1 - icc2 - icc3) * (1 - r12) / (n * J));
         1 - pt(qt(1 - sig.level / tside, df = K - q - 2) ,
                df = K - q - 2, lambda) +
@@ -237,19 +235,19 @@ power.3 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
              df = K - q - 2, lambda)
       })
     } else {
-      p.expr <- quote({
+      pwr.expr <- quote({
         K <- m / ((1 - p) * (c1 * n * J + c2 * J + c3)
                   + p * (c1t * n * J + c2t * J + c3t));
-        lambda <- es * sqrt(p * (1 - p) * K) /
+        lambda <- d * sqrt(p * (1 - p) * K) /
           sqrt(icc3 * (1 - r32) + icc2 * (1 - r22) / J + (1 - icc2 - icc3) * (1 - r12) / (n * J));
         1 - pt(qt(1 - sig.level / tside, df = K - q - 2),
                df = K - q - 2, lambda)
       })
     }
   } else {
-    if (two.tailed) {
-      p.expr <- quote({
-        lambda <- es * sqrt(p * (1 - p) * K) /
+    if (two.tailed == TRUE) {
+      pwr.expr <- quote({
+        lambda <- d * sqrt(p * (1 - p) * K) /
           sqrt(icc3 * (1 - r32) + icc2 * (1 - r22) / J + (1 - icc2 - icc3) * (1 - r12) / (n * J));
         1 - pt(qt(1 - sig.level / tside, df = K - q - 2),
                df = K - q - 2, lambda) +
@@ -257,8 +255,8 @@ power.3 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
              df = K - q - 2, lambda)
       })
     } else {
-      p.expr <- quote({
-        lambda <- es * sqrt(p * (1 - p) * K) /
+      pwr.expr <- quote({
+        lambda <- d * sqrt(p * (1 - p) * K) /
           sqrt(icc3 * (1 - r32) + icc2 * (1 - r22) / J + (1 - icc2 - icc3) * (1 - r12) / (n * J));
         1 - pt(qt(1 - sig.level / tside, df = K - q - 2),
                df = K - q - 2, lambda)
@@ -268,31 +266,32 @@ power.3 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
   limFun <- function(x, y) {
     if (!is.null(x) && length(x) == 2 && is.numeric(x)) {x} else {y}
   }
-  Klim <- limFun(x = Klim, y = c(4, 10e10))
+  Klim <- limFun(x = Klim, y = c(4, 1e+10))
   powerlim <- limFun(x = powerlim, y = c(1e-10, 1 - 1e-10))
-  eslim <- limFun(x = eslim, y = c(0, 5))
-  if(cost.model){
-    mlim <- limFun(x = mlim, y = c(Klim[1] * Kcost, Klim[2] * Kcost))
-    if (is.null(power)) {
-      out <- list(power = eval(p.expr))
+  dlim <- limFun(x = dlim, y = c(0, 5))
+  if(cost.model == TRUE){
+      if (is.null(power)) {
+      out <- list(power = eval(pwr.expr))
     } else if (is.null(m)) {
+      Kcost <- ((1 - p) * (c1 * n * J + c2 * J + c3) + p * (c1t * n * J + c2t * J + c3t))
+      mlim <- limFun(x = mlim, y = c(Klim[1] * Kcost, Klim[2] * Kcost))
       out <- list(m = stats::uniroot(function(m)
-        eval(p.expr) - power, mlim)$root)
+        eval(pwr.expr) - power, mlim)$root)
       out <- c(out, list(K = out$m / ((1 - p) * (c1 * n * J + c2 * J + c3)
                                    + p * (c1t * n * J + c2t * J + c3t))))
-    } else if (is.null(es)) {
-      out <- list(es = stats::uniroot(function(es)
-        eval(p.expr) - power, eslim)$root)
+    } else if (is.null(d)) {
+      out <- list(d = stats::uniroot(function(d)
+        eval(pwr.expr) - power, dlim)$root)
     }
   } else {
     if (is.null(power)) {
-      out <- list(power = eval(p.expr))
+      out <- list(power = eval(pwr.expr))
     } else if (is.null(K)) {
       out <- list(K = stats::uniroot(function(K)
-        eval(p.expr) - power, Klim)$root)
-    } else if (is.null(es)) {
-      out <- list(es = stats::uniroot(function(es)
-        eval(p.expr) - power, eslim)$root)
+        eval(pwr.expr) - power, Klim)$root)
+    } else if (is.null(d)) {
+      out <- list(d = stats::uniroot(function(d)
+        eval(pwr.expr) - power, dlim)$root)
     }
   }
   power.out <- list(funName = funName,

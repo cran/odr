@@ -5,20 +5,20 @@
 #'     the sample allocation that minimizes the variance of
 #'     treatment effect under fixed budget and cost structure.
 #'     The optimal design parameters include
-#'     the average level-1 sample size per level-2 unit (\code{n})
-#'     and the proportion of level-2 clusters/groups to assign to treatment (\code{p}).
+#'     the level-1 sample size per level-2 unit (\code{n})
+#'     and the proportion of level-2 clusters/groups to be assigned to treatment (\code{p}).
 #'     This function solves the optimal \code{n} and/or \code{p}
 #'     with and without constraints.
 #'
 #' @inheritParams power.2
 #' @inheritParams od.4
-#' @param m total budget, default is the total costs of sampling 60
+#' @param m total budget, default value is the total costs of sampling 60
 #'     level-2 units across treatment conditions.
-#' @param plot.by specify variance plot by \code{n} and/or \code{p}; default is
+#' @param plot.by specify variance plot by \code{n} and/or \code{p}; default value is
 #'     plot.by = list(n = "n", p = "p").
-#' @param plab the plot label for p, default is "Proportion Level-2 Units in Treatment: p"
+#' @param plab the plot label for p, default value is "Proportion Level-2 Units in Treatment: p"
 #' @param verbose logical; print the values of \code{n} and \code{p} if TRUE,
-#'    otherwise not; default is TRUE.
+#'    otherwise not; default value is TRUE.
 #'
 #' @return
 #'     unconstrained or constrained optimal sample allocation (\code{n} and \code{p}).
@@ -29,48 +29,52 @@
 #' @export od.2
 #'
 #' @references
-#'   (1) Shen, Z., & Kelcey, B. (2018, April). Optimal design of cluster
+#'   Shen, Z., & Kelcey, B. (2018, April). Optimal design of cluster
 #'   randomized trials under condition- and unit-specific cost structures. Roundtable
-#'   discussion to be presented at American Educational Research Association (AERA)
-#'   annual conference; (2) Shen, Z., & Kelcey, B. (under review).
+#'   discussion presented at American Educational Research Association (AERA)
+#'   annual conference, New York City, NY;
+#'
+#'   Shen, Z., & Kelcey, B. (revise & resubmit).
 #'   Optimal sample allocation under unequal costs in cluster-randomized trials.
-#'   Journal of Educational and Behavioral Statistics. (3) Shen, Z.(in progress).
+#'   Journal of Educational and Behavioral Statistics.
+#'
+#'   Shen, Z. (in progress).
 #'   Using optimal sample allocation to
-#'   improve design efficiency for multilevel randomized trials.
+#'   improve statistical precision and design efficiency for multilevel randomized trials
 #'   (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
 #'
 #' @examples
 #' # unconstrained optimal design #---------
-#' myod1 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
+#'   myod1 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
 #'               varlim = c(0.01, 0.02))
-#' myod1$out # output
+#'   myod1$out # output
 #' # plot by p
-#' myod1 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
+#'   myod1 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
 #'               varlim = c(0.01, 0.02), plot.by = list(p = 'p'))
 #'
 #' # constrained optimal design with n = 20 #---------
-#' myod2 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
+#'   myod2 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
 #'               n = 20, varlim = c(0.005, 0.025))
-#' myod2$out
+#'   myod2$out
 #' # relative efficiency (RE)
-#' myre <- re(od = myod1, subod= myod2)
-#' myre$out # RE = 0.88
+#'   myre <- re(od = myod1, subod= myod2)
+#'   myre$re # RE = 0.88
 #'
 #' # constrained optimal design with p = 0.5 #---------
-#' myod3 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
+#'   myod3 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
 #'              p = 0.5, varlim = c(0.005, 0.025))
-#' myod3$out
+#'   myod3$out
 #' # relative efficiency (RE)
-#' myre <- re(od = myod1, subod= myod3)
-#' myre$out # RE = 0.90
+#'   myre <- re(od = myod1, subod= myod3)
+#'   myre$re # RE = 0.90
 #'
 #' # constrained n and p, no calculation performed #---------
-#' myod4 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
+#'   myod4 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
 #'               n = 20, p = 0.5, varlim = c(0.005, 0.025))
-#' myod4$out
+#'   myod4$out
 #' # relative efficiency (RE)
-#' myre <- re(od = myod1, subod= myod4)
-#' myre$out # RE = 0.83
+#'   myre <- re(od = myod1, subod= myod4)
+#'   myre$re # RE = 0.83
 #'
 od.2 <- function(n = NULL, p = NULL, icc = NULL, r12 = NULL, r22 = NULL,
                  c1 = NULL, c2 = NULL, c1t = NULL, c2t = NULL, m = NULL,
@@ -116,7 +120,7 @@ od.2 <- function(n = NULL, p = NULL, icc = NULL, r12 = NULL, r22 = NULL,
          sqrt(((1 - p) * c2 + p * c2t)/(( 1 - p) * c1 + p * c1t))
   } else if (!is.null(n) && is.null(p)) {
     if (!is.numeric(n) || n <= 0)
-      stop("constrained 'n' must be nu meric in (0, 10e10)")
+      stop("constrained 'n' must be numeric with n > 0")
     p <- sqrt((c1 * n + c2) / (c1t * n + c2t)) /
       (1 + sqrt((c1 * n + c2)/(c1t * n + c2t)))
   } else if (!is.null(p) && is.null(n)) {
@@ -126,14 +130,14 @@ od.2 <- function(n = NULL, p = NULL, icc = NULL, r12 = NULL, r22 = NULL,
          sqrt(((1 - p) * c2 + p * c2t) / ((1 - p) * c1 + p * c1t))
   } else if (!is.null(p) && !is.null(n)) {
     if (!is.numeric(n) || n <= 0)
-      stop("constrained 'n' must be nu meric in (0, 10e10)")
+      stop("constrained 'n' must be numeric with n > 0")
     if (!is.numeric(p) || any(p <=0 | p >= 1))
       stop("constrained 'p' must be numeric in (0, 1)")
       cat("===============================\n",
         "Both p and n are constrained, there is no calculation from other parameters",
         ".\n===============================\n", sep = "")
     }
-  if (verbose) {
+  if (verbose == TRUE) {
     if (!is.null(par$n)) {
       cat("The constrained level-1 sample size per level-2 unit (n) is ", n, ".\n", sep = "")
     } else {

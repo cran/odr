@@ -2,21 +2,21 @@
 % Please edit documentation in R/power.3.R
 \name{power.3}
 \alias{power.3}
-\title{Required budget (and/or sample size), power, MDES calculation for three-level CRTs}
+\title{Budget and/or sample size, power, MDES calculation for three-level CRTs}
 \usage{
 power.3(cost.model = TRUE, expr = NULL, constraint = NULL,
-  sig.level = 0.05, two.tailed = TRUE, es = NULL, power = NULL,
-  m = NULL, n = NULL, J = NULL, K = NULL, p = NULL, icc2 = NULL,
-  icc3 = NULL, r12 = NULL, r22 = NULL, r32 = NULL, q = NULL,
-  c1 = NULL, c2 = NULL, c3 = NULL, c1t = NULL, c2t = NULL,
-  c3t = NULL, eslim = NULL, powerlim = NULL, Klim = NULL, mlim = NULL,
-  rounded = TRUE)
+  sig.level = 0.05, two.tailed = TRUE, d = NULL, power = NULL,
+  m = NULL, n = NULL, J = NULL, K = NULL, p = NULL,
+  icc2 = NULL, icc3 = NULL, r12 = NULL, r22 = NULL, r32 = NULL,
+  q = NULL, c1 = NULL, c2 = NULL, c3 = NULL, c1t = NULL,
+  c2t = NULL, c3t = NULL, dlim = NULL, powerlim = NULL,
+  Klim = NULL, mlim = NULL, rounded = TRUE)
 }
 \arguments{
-\item{cost.model}{logical, perform power analyses accommodating costs and budget
+\item{cost.model}{logical; power analyses accommodating costs and budget
 (e.g., required budget for desired power, power/MDES under fixed budget)
-if TRUE, perform conventional power analyses
-(e.g., required sample size, power, or MDES calculation) if FALSE; default is TRUE.}
+if TRUE, otherwise conventional power analyses
+(e.g., required sample size, power, or MDES calculation); default value is TRUE.}
 
 \item{expr}{returned objects from function \code{\link{od.3}}; default is NULL;
 if \code{expr} is specified, parameter values of \code{icc2}, \code{icc3},
@@ -33,28 +33,28 @@ if \code{constraint} is specified.}
 and/or \code{J} in list format to overwrite those
 from \code{expr}; default is NULL.}
 
-\item{sig.level}{significance level or type I error rate, default is 0.05.}
+\item{sig.level}{significance level or type I error rate, default value is 0.05.}
 
-\item{two.tailed}{logical; perform two-tailed tests if TRUE,
-perform one-tailed tests if FALSE; default is TRUE.}
+\item{two.tailed}{logical; two-tailed tests if TRUE,
+otherwise one-tailed tests; default value is TRUE.}
 
-\item{es}{effect size.}
+\item{d}{effect size.}
 
 \item{power}{statistical power.}
 
 \item{m}{total budget.}
 
-\item{n}{the average level-1 sample size per level-2 unit.}
+\item{n}{the level-1 sample size per level-2 unit.}
 
-\item{J}{the average level-2 sample size per level-3 unit.}
+\item{J}{the level-2 sample size per level-3 unit.}
 
-\item{K}{the level-3 sample size across treatment conditions.}
+\item{K}{the total level-3 sample size.}
 
 \item{p}{the proportion of level-3 clusters/units assigned to treatment.}
 
-\item{icc2}{the unconditional intraclass correlation coefficient (icc) at level 2.}
+\item{icc2}{the unconditional intraclass correlation coefficient (ICC) at level 2.}
 
-\item{icc3}{the unconditional intraclass correlation coefficient (icc) at level 3.}
+\item{icc3}{the unconditional intraclass correlation coefficient (ICC) at level 3.}
 
 \item{r12}{the proportion of level-1 variance explained by covariates.}
 
@@ -76,24 +76,24 @@ perform one-tailed tests if FALSE; default is TRUE.}
 
 \item{c3t}{the cost of sampling one level-3 unit in treatment condition.}
 
-\item{eslim}{the range for searching the root of effect size (\code{es}) numerically,
-default is c(0, 5).}
+\item{dlim}{the range for searching the root of effect size (\code{d}) numerically,
+default value is c(0, 5).}
 
 \item{powerlim}{the range for searching the root of power (\code{power}) numerically,
-default is c(1e-10, 1 - 1e-10).}
+default value is c(1e-10, 1 - 1e-10).}
 
 \item{Klim}{the range for searching the root of level-3 sample size (\code{K}) numerically,
-default is c(4, 10e10)}
+default value is c(4, 1e+10)}
 
 \item{mlim}{the range for searching the root of budget (\code{m}) numerically,
-default is the costs sampling \code{Klim} level-3 units across treatment conditions
-or c(4 * Kcost, 10e10 * Kcost) with Kcost =
+default value is the costs sampling \code{Klim} level-3 units across treatment conditions
+or c(4 * Kcost, 1e+10 * Kcost) with Kcost =
 ((1 - p) * (c1 * n * J + c2 * J + c3) + p * (c1t * n * J + c2t * J + c3t))}
 
 \item{rounded}{logical; round the values of \code{p}, \code{n}/\code{J} that are
 from functions \code{\link{od.3}}
 to two decimal places and integer, respectively if TRUE,
-no rounding if FALSE; default is TRUE.}
+otherwise no rounding; default value is TRUE.}
 }
 \value{
 Required budget (and/or required level-3 sample size), statistical power, or MDES
@@ -110,67 +110,68 @@ This function can calculate required budget for desired power,
 }
 \examples{
 # unconstrained optimal design
-myod1 <- od.3(icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5,
+  myod1 <- od.3(icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5,
               c1 = 1, c2 = 5, c3 = 25, c1t = 1, c2t = 50, c3t = 250)
-myod1$out # output  # n = 7.9, J = 3.2, p = 0.28
+  myod1$out # output  # n = 7.9, J = 3.2, p = 0.28
 
 # ------- power analyses by default considering costs and budget -------
 # required budget and sample size
-mym.1 <- power.3(expr = myod1, es = 0.3, q = 1, power = 0.8)
-mym.1$out  # m = 7319, K = 44.4
-mym.1$par  # parameters and their values used for the function
+  mym.1 <- power.3(expr = myod1, d = 0.2, q = 1, power = 0.8)
+  mym.1$out  # m = 16032, K = 97.3
+  #mym.1$par  # parameters and their values used for the function
 # or equivalently, specify every argument in the function
-mym.1 <- power.3(es = 0.3, power = 0.8, q = 1,
+  mym.1 <- power.3(d = 0.2, power = 0.8, q = 1,
                  icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5,
                  c1 = 1, c2 = 5, c3 = 25, c1t = 1, c2t = 50, c3t = 250,
                  n = 8, J = 3, p = 0.28)
 # required budget and sample size with constrained p
-mym.2 <- power.3(expr = myod1, es = 0.3, q = 1, power = 0.8,
+  mym.2 <- power.3(expr = myod1, d = 0.2, q = 1, power = 0.8,
                  constraint = list(p = 0.5))
-mym.2$out  # m = 8843, K = 36.2
+  mym.2$out  # m = 19239, K = 78.8
 # required budget and sample size with constrained p and J
-mym.3 <- power.3(expr = myod1, es = 0.3, q = 1, power = 0.8,
+  mym.3 <- power.3(expr = myod1, d = 0.2, q = 1, power = 0.8,
                  constraint = list(p = 0.5, J = 20))
-mym.3$out  # m = 18775, K = 22.2
+  mym.3$out  # m = 39774, K = 46.9
 
 # Power calculation
-mypower <- power.3(expr = myod1, q = 1, es = 0.3, m = 7319)
-mypower$out  # power = 0.80
+  mypower <- power.3(expr = myod1, q = 1, d = 0.2, m = 16032)
+  mypower$out  # power = 0.80
 # Power calculation under constrained p (p = 0.5)
-mypower.1 <- power.3(expr = myod1, q = 1, es = 0.3, m = 7319,
+  mypower.1 <- power.3(expr = myod1, q = 1, d = 0.2, m = 16032,
                  constraint = list(p = 0.5))
-mypower.1$out  # power = 0.72
+  mypower.1$out  # power = 0.72
 
 # MDES calculation
-mymdes <- power.3(expr = myod1, q = 1, power = 0.80, m = 7319)
-mymdes$out  # MDES = 0.30
+  mymdes <- power.3(expr = myod1, q = 1, power = 0.80, m = 16032)
+  mymdes$out  # d = 0.20
 
 
 # ------- conventional power analyses with cost.model = FALSE-------
 # Required sample size
-myK <- power.3(cost.model = FALSE, expr = myod1, es = 0.3, q = 1, power = 0.8)
-myK$out  # K = 44.4
-myK$par  # parameters and their values used for the function
+  myK <- power.3(cost.model = FALSE, expr = myod1, d = 0.2, q = 1, power = 0.8)
+  myK$out  # K = 97.3
+  #myK$par  # parameters and their values used for the function
 # or equivalently, specify every argument in the function
-myK <- power.3(cost.model = FALSE, es = 0.3, power = 0.8, q = 1,
+  myK <- power.3(cost.model = FALSE, d = 0.2, power = 0.8, q = 1,
                   icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5,
                   n = 8, J = 3, p = 0.28)
 
 # Power calculation
- mypower1 <- power.3(cost.model = FALSE, expr = myod1, K = 44, es = 0.3, q = 1)
- mypower1$out  # power = 0.80
+  mypower1 <- power.3(cost.model = FALSE, expr = myod1, K = 97, d = 0.2, q = 1)
+  mypower1$out  # power = 0.80
 
 # MDES calculation
-mymdes1 <- power.3(cost.model = FALSE, expr = myod1, K = 44, power = 0.8, q = 1)
-mymdes1$out  # es = 0.30
-
+  mymdes1 <- power.3(cost.model = FALSE, expr = myod1, K = 97, power = 0.8, q = 1)
+  mymdes1$out  # d = 0.20
 
 }
 \references{
-(1) Shen, Z., & Kelcey, B. (under review).
+Shen, Z., & Kelcey, B. (revise & resubmit).
   Optimal sample allocation under unequal costs in cluster-randomized trials.
-  Journal of Educational and Behavioral Statistics. (2) Shen, Z.(in progress).
+  Journal of Educational and Behavioral Statistics.
+
+  Shen, Z. (in progress).
   Using optimal sample allocation to
-  improve design efficiency for multilevel randomized trials.
+  improve statistical precision and design efficiency for multilevel randomized trials
   (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
 }

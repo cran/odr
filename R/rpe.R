@@ -1,7 +1,7 @@
-#' Relative efficiency (RE) calculation
+#' Relative precision and efficiency (RPE) calculation
 #'
-#' @description Calculate the relative efficiency (RE) between two designs, it returns
-#'     same results as those from function \code{\link{rpe}}
+#' @description Calculate the relative precision and efficiency (RPE) between two designs,
+#'     it returns same results as those from function \code{\link{re}}
 #'
 #' @param od returned object of first design (e.g., unconstrained optimal design)
 #'     from function \code{\link{od.1}}, \code{\link{od.2}},
@@ -11,15 +11,15 @@
 #'     from function \code{\link{od.1}}, \code{\link{od.2}},
 #'     \code{\link{od.3}}, \code{\link{od.4}}, \code{\link{od.2m}},
 #'     \code{\link{od.3m}}, or \code{\link{od.4m}}
-#' @param verbose logical; print the value of relative efficiency if TRUE,
+#' @param verbose logical; print the value of relative precision and efficiency if TRUE,
 #'    otherwise not; default is TRUE.
 #' @param rounded logical; round the values of \code{p}, \code{n}/\code{J}/\code{K}
 #'     that are from functions to two decimal places and integer, respectively if TRUE,
 #'     no rounding if FALSE; default is TRUE.
 #' @return
-#'     Relative efficiency value
+#'     Relative precision and efficiency value.
 #'
-#' @export re
+#' @export rpe
 #'
 #' @references
 #'   Shen, Z., & Kelcey, B. (2018, April). Optimal design of cluster
@@ -43,15 +43,15 @@
 #' # constrained optimal design with n = 20
 #'   myod2 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
 #'               n = 20, varlim = c(0.005, 0.025))
-#' # relative efficiency (RE)
-#'   myre <- re(od = myod1, subod= myod2)
-#'   myre$out # RE = 0.88
+#' # relative precision and efficiency (RPE)
+#'   myrpe <- rpe(od = myod1, subod= myod2)
+#'   myrpe$out # RPE = 0.88
 #' # constrained optimal design with p = 0.5
 #'   myod2 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
 #'              p = 0.5, varlim = c(0.005, 0.025))
-#' # relative efficiency (RE)
-#'   myre <- re(od = myod1, subod= myod2)
-#'   myre$out # RE = 0.90
+#' # relative precision and efficiency (RPE)
+#'   mypre <- rpe(od = myod1, subod= myod2)
+#'   mypre$out # RPE = 0.90
 #'
 #' # unconstrained optimal design of 3-level CRT #----------
 #'   myod1 <- od.3(icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5,
@@ -61,9 +61,9 @@
 #'   myod2 <- od.3(icc2 = 0.2, icc3 = 0.1, r12 = 0.5, r22 = 0.5, r32 = 0.5, J = 20,
 #'              c1 = 1, c2 = 5, c3 = 25, c1t = 1, c2t = 50, c3t = 250,
 #'              varlim = c(0, 0.025))
-#' # relative efficiency (RE)
-#'   myre <- re(od = myod1, subod= myod2)
-#'   myre$out # RE = 0.53
+#' # relative precision and efficiency (RPE)
+#'   myrpe <- rpe(od = myod1, subod= myod2)
+#'   myrpe$out # RPE = 0.53
 #'
 #' # unconstrained optimal design of 4-level CRT #---------
 #'   myod1 <- od.4(icc2 = 0.2, icc3 = 0.1, icc4 = 0.05, r12 = 0.5,
@@ -77,16 +77,16 @@
 #'               c1 = 1, c2 = 5, c3 = 25, c4 = 125,
 #'               c1t = 1, c2t = 50, c3t = 250, c4t = 2500,
 #'               varlim = c(0, 0.01))
-#' # relative efficiency (RE)
-#'   myre <- re(od = myod1, subod= myod2)
-#'   myre$out # RE = 0.78
+#' # relative precision and efficiency (RPE)
+#'   myrpe <- rpe(od = myod1, subod= myod2)
+#'   myrpe$out # RPE = 0.78
 #'
-re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
+rpe <- function(od, subod, rounded = TRUE, verbose = TRUE) {
   funName <- "re"
   if (od$funName == subod$funName) {
     designType <- od$designType
   } else {
-    stop("re function can only compare relative efficiency (RE) between
+    stop("rpe function can only compare relative precision and efficiency (RPE) between
          two studies with same design type")
   }
   if (designType == "individual RCTs") {
@@ -109,7 +109,7 @@ re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
         p <- subod$out$p
       }
     }
-    re <- ((1 - po) * c1
+    rpe <- ((1 - po) * c1
        + po * c1t ) /
       ((1 - p) * c1
        + p * c1t) *
@@ -147,7 +147,7 @@ re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
         p <- subod$out$p
       }
     }
-    re <- ( no * icc2 * (1 - r22) + (1 - icc2) * (1 - r12)) /
+    rpe <- ( no * icc2 * (1 - r22) + (1 - icc2) * (1 - r12)) /
       (n * icc2 * (1 - r22) + (1 - icc2) * (1 - r12)) *
       ((1 - po) * (c1 * no + c2)
        + po * (c1t * no + c2t)) /
@@ -199,7 +199,7 @@ re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
         p <- subod$out$p
       }
     }
-    re <- ( no * Jo * icc3 * (1 - r32)
+    rpe <- ( no * Jo * icc3 * (1 - r32)
            + no * icc2 * (1 - r22) + (1 - icc2 - icc3 ) * (1 - r12)) /
       ( n * J * icc3 * (1 - r32)
        + n * icc2 * (1 - r22) + (1 - icc2 - icc3) * (1 - r12)) *
@@ -265,7 +265,7 @@ re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
         p <- subod$out$p
       }
     }
-    re <- (no * Jo * Ko * icc4 * (1 - r42) + no * Jo * icc3 * (1 - r32)
+    rpe <- (no * Jo * Ko * icc4 * (1 - r42) + no * Jo * icc3 * (1 - r32)
            + no * icc2 * (1 - r22) + (1 - icc2 - icc3 - icc4) * (1 - r12)) /
           (n * J * K * icc4 * (1 - r42) + n * J * icc3 * (1 - r32)
           + n * icc2 * (1 - r22) + (1 - icc2 - icc3 - icc4) * (1 - r12)) *
@@ -332,7 +332,7 @@ re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
         p <- subod$out$p
       }
     }
-    re <- (po * (1 - po) * no * Jo * Ko * omega * (1 - r42m) + no * Jo * icc3 * (1 - r32)
+    rpe <- (po * (1 - po) * no * Jo * Ko * omega * (1 - r42m) + no * Jo * icc3 * (1 - r32)
            + no * icc2 * (1 - r22) + (1 - icc2 - icc3 - icc4) * (1 - r12)) /
       (p * (1 - p) * n * J * K * omega * (1 - r42m) + n * J * icc3 * (1 - r32)
        + n * icc2 * (1 - r22) + (1 - icc2 - icc3 - icc4) * (1 - r12)) *
@@ -386,7 +386,7 @@ re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
         p <- subod$out$p
       }
     }
-    re <- (po * (1 - po) * no * Jo * omega * (1 - r32m) +
+    rpe <- (po * (1 - po) * no * Jo * omega * (1 - r32m) +
            + no * icc2 * (1 - r22) + (1 - icc2 - icc3) * (1 - r12)) /
       (p * (1 - p) * n * J * omega * (1 - r32m) +
        + n * icc2 * (1 - r22) + (1 - icc2 - icc3) * (1 - r12)) *
@@ -428,23 +428,23 @@ re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
         p <- subod$out$p
       }
     }
-    re <- (po * (1 - po) * no * omega * (1 - r22m) + (1 - icc) * (1 - r12)) /
+    rpe <- (po * (1 - po) * no * omega * (1 - r22m) + (1 - icc) * (1 - r12)) /
       (p * (1 - p) * n * omega * (1 - r22m) + (1 - icc) * (1 - r12)) *
       ((1 - po) * c1 * no + po * c1t * no + c2) /
       ((1 - p) * c1 * n + p * c1t * n + c2) *
       (p * (1 - p) * n) / (po * (1 - po) * no)
     }
-    if (verbose)  cat("The relative efficiency (RE) of the two ",
-                      designType, " is ", re, ".\n", sep = "")
-    if (re > 1) {
+    if (verbose) {cat("The relative precision and efficiency (RPE) of the two ",
+                      designType, " is ", rpe, ".\n", sep = "")}
+    if (rpe > 1) {
       cat("===============================\n",
-          "Please switch the objects for 'od' and 'subod' to have 0 < RE <= 1",
+          "Please switch the objects for 'od' and 'subod' to have 0 < RPE <= 1",
           ".\n===============================\n", sep = "")
     }
-    re.out <- list(funName = funName,
+    rpe.out <- list(funName = funName,
                         designType = designType,
-                        odpar = od$par, subodpar = subod$par, re = re)
-    return(re.out)
+                        odpar = od$par, subodpar = subod$par, rpe = rpe)
+    return(rpe.out)
   }
 
 

@@ -1,4 +1,4 @@
-#' Required budget (and/or sample size), power, MDES calculation for two-level CRTs
+#' Budget and/or sample size, power, MDES calculation for two-level CRTs
 #'
 #' @description This function can calculate required budget for desired power,
 #'     power or minimum detectable effect size (MDES) under fixed budget
@@ -21,8 +21,8 @@
 #'     from \code{expr}; default is NULL.
 #' @param icc the unconditional intraclass correlation coefficient (ICC) in population or in
 #'     each treatment condition.
-#' @param J the level-2 sample size across treatment conditions.
-#' @param p the proportion of level-2 clusters/units assigned to treatment.
+#' @param J the total level-2 sample size.
+#' @param p the proportion of level-2 clusters/units to be assigned to treatment.
 #' @param q the number of level-2 covariates.
 #' @param Jlim the range for searching the root of level-2 sample size (\code{J}) numerically,
 #'     default is c(4, 10e10)
@@ -32,7 +32,7 @@
 #'     , 10e10 * Jcost), with Jcost = ((1 - p) * (c1 * n + c2) + p * (c1t * n + c2t))
 #' @param rounded logical; round \code{n} and \code{p} that are from functions \code{od.2}
 #'     to integer and two decimal places, respectively if TRUE,
-#'     no rounding if FALSE; default is TRUE.
+#'     otherwise no rounding; default value is TRUE.
 #'
 #' @return Required budget (and/or required level-2 sample size), statistical power, or MDES
 #'     depending on the specification of parameters.
@@ -42,89 +42,91 @@
 #' @export power.2
 #'
 #' @references
-#'   (1) Shen, Z., & Kelcey, B. (2018, April). Optimal design of cluster
+#'   Shen, Z., & Kelcey, B. (2018, April). Optimal design of cluster
 #'   randomized trials under condition- and unit-specific cost structures. Roundtable
-#'   discussion to be presented at American Educational Research Association (AERA)
-#'   annual conference; (2) Shen, Z., & Kelcey, B. (under review).
-#'   Optimal sample allocation under unequal costs in cluster-randomized trials.
-#'   Journal of Educational and Behavioral Statistics. (3) Shen, Z.(in progress).
-#'   Using optimal sample allocation to
-#'   improve design efficiency for multilevel randomized trials.
-#'   (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
+#'   discussion presented at American Educational Research Association (AERA)
+#'   annual conference, New York City, NY;
 #'
+#'   Shen, Z., & Kelcey, B. (revise & resubmit).
+#'   Optimal sample allocation under unequal costs in cluster-randomized trials.
+#'   Journal of Educational and Behavioral Statistics.
+#'
+#'   Shen, Z. (in progress).
+#'   Using optimal sample allocation to
+#'   improve statistical precision and design efficiency for multilevel randomized trials
+#'   (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
 #' @examples
 #' # unconstrained optimal design
-#' myod1 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50)
-#' myod1$out   # n = 8.9, p = 0.33
+#'   myod1 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50)
+#'   myod1$out   # n = 8.9, p = 0.33
 #'
 #' # ------- power analyses by default considering costs and budget -------
 #' # required budget and sample size
-#' mym.1 <- power.2(expr = myod1, es = 0.3, q = 1, power = 0.8)
-#' mym.1$out  # m = 1702, J = 59.0
-#' mym.1$par  # parameters and their values used for the function
+#'   mym.1 <- power.2(expr = myod1, d = 0.2, q = 1, power = 0.8)
+#'   mym.1$out  # m = 3755, J = 130.2
+#'   #mym.1$par  # parameters and their values used for the function
 #' # or equivalently, specify every argument in the function
-#' mym.1 <- power.2(es = 0.3, power = 0.8, icc = 0.2,
+#'   mym.1 <- power.2(d = 0.2, power = 0.8, icc = 0.2,
 #'                  c1 = 1, c2 = 5, c1t = 1, c2t = 50,
 #'                   r12 = 0.5, r22 = 0.5, n = 9, p = 0.33, q = 1)
 #' # required budget and sample size with constrained p
-#' mym.2 <- power.2(expr = myod1, es = 0.3, q = 1, power = 0.8,
+#'   mym.2 <- power.2(expr = myod1, d = 0.2, q = 1, power = 0.8,
 #'                constraint = list(p = 0.5))
-#' mym.2$out  # m = 1913, J = 52.4
+#'   mym.2$out  # m = 4210, J = 115.3
 #' # required budget and sample size with constrained p and n
-#' mym.3 <- power.2(expr = myod1, es = 0.3, q = 1, power = 0.8,
+#'   mym.3 <- power.2(expr = myod1, d = 0.2, q = 1, power = 0.8,
 #'                constraint = list(p = 0.5, n = 20))
-#' mym.3$out  # m = 2086, J = 43.9
+#'   mym.3$out  # m = 4568, J = 96.2
 #'
 #' # Power calculation
-#' mypower <- power.2(expr = myod1, q = 1, es = 0.3, m = 1702)
-#' mypower$out  # power = 0.80
+#'   mypower <- power.2(expr = myod1, q = 1, d = 0.2, m = 3755)
+#'   mypower$out  # power = 0.80
 #' # Power calculation under constrained p (p = 0.5)
-#' mypower.1 <- power.2(expr = myod1, q = 1, es = 0.3, m = 1702,
+#'   mypower.1 <- power.2(expr = myod1, q = 1, d = 0.2, m = 3755,
 #'                constraint = list(p = 0.5))
-#' mypower.1$out  # power = 0.75
+#'   mypower.1$out  # power = 0.75
 #'
 #' # MDES calculation
-#' mymdes <- power.2(expr = myod1, q = 1, power = 0.80, m = 1702)
-#' mymdes$out  # MDES = 0.30
+#'   mymdes <- power.2(expr = myod1, q = 1, power = 0.80, m = 3755)
+#'   mymdes$out  # d = 0.20
 #'
 #'
 #' # ------- conventional power analyses with cost.model = FALSE-------
 #' # Required J
-#' myJ <- power.2(cost.model = FALSE, expr = myod1, es = 0.3, q = 1, power = 0.8)
-#' myJ$out  # J = 59.0
-#' myJ$par  # parameters and their values used for the function
+#'   myJ <- power.2(cost.model = FALSE, expr = myod1, d = 0.2, q = 1, power = 0.8)
+#'   myJ$out  # J = 130.2
+#'   #myJ$par  # parameters and their values used for the function
 #' # or equivalently, specify every argument in the function
-#' myJ <- power.2(cost.model = FALSE, es = 0.3, power = 0.8, icc = 0.2,
+#'   myJ <- power.2(cost.model = FALSE, d = 0.2, power = 0.8, icc = 0.2,
 #'                   r12 = 0.5, r22 = 0.5, n = 9, p = 0.33, q = 1)
 #'
 #' # Power calculation
-#'  mypower1 <- power.2(cost.model = FALSE, expr = myod1, J = 59, es = 0.3, q = 1)
-#' mypower1$out  # power = 0.80
+#'   mypower1 <- power.2(cost.model = FALSE, expr = myod1, J = 130, d = 0.2, q = 1)
+#'   mypower1$out  # power = 0.80
 #'
 #' # MDES calculation
-#' mymdes1 <- power.2(cost.model = FALSE, expr = myod1, J = 59, power = 0.8, q = 1)
-#' mymdes1$out  # es = 0.30
-#'
+#'   mymdes1 <- power.2(cost.model = FALSE, expr = myod1, J = 130, power = 0.8, q = 1)
+#'   mymdes1$out  # d = 0.20
 #'
 power.2 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
                     sig.level = 0.05, two.tailed = TRUE,
-                    es = NULL, power = NULL, m = NULL,
+                    d = NULL, power = NULL, m = NULL,
                     n = NULL, J = NULL, p = NULL,
                     icc = NULL, r12 = NULL, r22 = NULL, q = NULL,
                     c1 = NULL, c2 = NULL, c1t = NULL, c2t = NULL,
-                    eslim = NULL, powerlim = NULL, Jlim = NULL, mlim = NULL,
+                    dlim = NULL, powerlim = NULL, Jlim = NULL, mlim = NULL,
                     rounded = TRUE) {
   funName <- "power.2"
   designType <- "two-level CRTs"
-  if (cost.model) {
-    if (sum(sapply(list(m, es, power), is.null)) != 1)
-      stop("exactly one of m, es, and power must be NULL
+  if (cost.model == TRUE) {
+    if (sum(sapply(list(m, d, power), is.null)) != 1)
+      stop("exactly one of 'm', 'd', and 'power' must be NULL
            when cost.model is TRUE")
     if (!is.null(J))
       stop("'J' must be NULL when cost.model is TRUE")
   } else {
-    if (sum(sapply(list(J, es, power), is.null)) != 1)
-      stop("exactly one of J, es, and power must be NULL
+    if (sum(sapply(list(J, d, power), is.null)) != 1)
+      stop("exactly one of 'J', 'd', and 'power' must be NULL
            when cost.model is FALSE")
     if (!is.null(m))
       stop("'m' must be NULL when cost.model is FALSE")
@@ -146,7 +148,7 @@ power.2 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
       c2 <- expr$par$c2
       c1t <- expr$par$c1t
       c2t <- expr$par$c2t
-      if (rounded) {
+      if (rounded == TRUE) {
         n <- round(expr$out$n, 0)
         p <- round(expr$out$p, 2)
       } else {
@@ -182,7 +184,7 @@ power.2 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
   if (sum(sapply(list(r12, r22), function(x) {
     NumberCheck(x) || any(0 > x | x >= 1)
   })) >= 1) stop("'r12', 'r22' must be numeric in [0, 1)")
-  if (cost.model){
+  if (cost.model == TRUE){
    if (sum(sapply(list(c1, c2, c1t, c2t), function(x) {
     NumberCheck(x) || x < 0})) >= 1)
     stop("'c1', 'c2', 'c1t', 'c2t' must be numeric in [0, Inf)")
@@ -193,26 +195,23 @@ power.2 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
    stop("'q' must be numeric in [0, 10e3]")
   if (NumberCheck(n) || n <= 0)
     stop("'n' must be numeric in (0, 10e10)")
-  if (NumberCheck(es) || any(0 > es | es > 5))
-    stop("'es' must be numeric in [0, 5],
+  if (NumberCheck(d) || any(0 > d | d > 5))
+    stop("'d' must be numeric in [0, 5],
          please transfer negative effect size to positive one if needed")
-  if (r22 > 0 && q == 0)
-    stop("'q' must be q >= 1 when r22 != 0")
   par <- list(cost.model = cost.model,
               sig.level = sig.level,
               two.tailed = two.tailed,
-              es = es, icc = icc, r12 = r12, r22 = r22,
+              d = d, icc = icc, r12 = r12, r22 = r22,
               c1 = c1, c2 = c2, c1t = c1t, c2t = c2t,
               n = n, J = J, p = p,
               q = q, m = m, power = power)
-  tside <- ifelse(two.tailed, 2, 1)
-  if (cost.model) {
-    Jcost <- ((1 - p) * (c1 * n + c2) + p * (c1t * n + c2t))
-    if (two.tailed) {
-      p.expr <- quote({
+  tside <- ifelse(two.tailed == TRUE, 2, 1)
+  if (cost.model == TRUE) {
+    if (two.tailed == TRUE) {
+      pwr.expr <- quote({
         J <- m / ((1 - p) * (c1 * n + c2)
                   + p * (c1t * n + c2t));
-        lambda <- es * sqrt(p * (1 - p) * J) /
+        lambda <- d * sqrt(p * (1 - p) * J) /
           sqrt(icc * (1 - r22) + (1 - icc) * (1 - r12) / n);
         1 - pt(qt(1 - sig.level / tside, df = J - q - 2) ,
                df = J - q - 2, lambda) +
@@ -220,19 +219,19 @@ power.2 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
              df = J - q - 2, lambda)
       })
     } else {
-      p.expr <- quote({
+      pwr.expr <- quote({
         J <- m / ((1 - p) * (c1 * n + c2)
                   + p * (c1t * n + c2t));
-        lambda <- es * sqrt(p * (1 - p) * J) /
+        lambda <- d * sqrt(p * (1 - p) * J) /
           sqrt(icc * (1 - r22) + (1 - icc) * (1 - r12) / n);
         1 - pt(qt(1 - sig.level / tside, df = J - q - 2),
                df = J - q - 2, lambda)
       })
     }
   } else {
-    if (two.tailed) {
-      p.expr <- quote({
-        lambda <- es * sqrt(p * (1 - p) * J) /
+    if (two.tailed == TRUE) {
+      pwr.expr <- quote({
+        lambda <- d * sqrt(p * (1 - p) * J) /
           sqrt(icc * (1 - r22) + (1 - icc) * (1 - r12) / n);
         1 - pt(qt(1 - sig.level / tside, df = J - q - 2),
                df = J - q - 2, lambda) +
@@ -240,8 +239,8 @@ power.2 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
              df = J - q - 2, lambda)
       })
     } else {
-      p.expr <- quote({
-        lambda <- es * sqrt(p * (1 - p) * J) /
+      pwr.expr <- quote({
+        lambda <- d * sqrt(p * (1 - p) * J) /
           sqrt(icc * (1 - r22) + (1 - icc) * (1 - r12) / n);
         1 - pt(qt(1 - sig.level / tside, df = J - q - 2),
                df = J - q - 2, lambda)
@@ -253,30 +252,30 @@ power.2 <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
   }
   Jlim <- limFun(x = Jlim, y = c(4, 10e10))
   powerlim <- limFun(x = powerlim, y = c(1e-10, 1 - 1e-10))
-  eslim <- limFun(x = eslim, y = c(0, 5))
-  if (cost.model)
-    mlim <- limFun(x = mlim, y = c(Jlim[1] * Jcost, Jlim[2] * Jcost))
-  if(cost.model){
+  dlim <- limFun(x = dlim, y = c(0, 5))
+  if(cost.model == TRUE){
     if (is.null(power)) {
-      out <- list(power = eval(p.expr))
+      out <- list(power = eval(pwr.expr))
     } else if (is.null(m)) {
+      Jcost <- ((1 - p) * (c1 * n + c2) + p * (c1t * n + c2t))
+      mlim <- limFun(x = mlim, y = c(Jlim[1] * Jcost, Jlim[2] * Jcost))
       out <- list(m = stats::uniroot(function(m)
-        eval(p.expr) - power, mlim)$root)
+        eval(pwr.expr) - power, mlim)$root)
       out <- c(out, list(J = out$m / (((1 - p) * (c1 * n + c2)
                                        + p * (c1t * n + c2t)))))
-    } else if (is.null(es)) {
-      out <- list(es = stats::uniroot(function(es)
-        eval(p.expr) - power, eslim)$root)
+    } else if (is.null(d)) {
+      out <- list(d = stats::uniroot(function(d)
+        eval(pwr.expr) - power, dlim)$root)
     }
   } else {
     if (is.null(power)) {
-      out <- list(power = eval(p.expr))
+      out <- list(power = eval(pwr.expr))
     } else if (is.null(J)) {
       out <- list(J = stats::uniroot(function(J)
-        eval(p.expr) - power, Jlim)$root)
-    } else if (is.null(es)) {
-      out <- list(es = stats::uniroot(function(es)
-        eval(p.expr) - power, eslim)$root)
+        eval(pwr.expr) - power, Jlim)$root)
+    } else if (is.null(d)) {
+      out <- list(d = stats::uniroot(function(d)
+        eval(pwr.expr) - power, dlim)$root)
     }
   }
   power.out <- list(funName = funName,
