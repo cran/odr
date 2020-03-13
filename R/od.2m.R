@@ -2,11 +2,11 @@
 #'
 #' @description The optimal design of two-level
 #'     multisite randomized trials (MRTs) is to choose
-#'     the sample allocation that minimizes the variance of
-#'     treatment effect under fixed budget and cost structure.
+#'     the sample allocation that minimizes the variance of a
+#'     treatment effect under a fixed budget and cost structure.
 #'     The optimal design parameters include
-#'     the level-1 sample size per level-2 unit (\code{n})
-#'     and the proportion of level-2 unit to be assigned to treatment (\code{p}).
+#'     the level-one sample size per site (\code{n})
+#'     and the proportion of level-one unit to be assigned to treatment (\code{p}).
 #'     This function solves the optimal \code{n} and/or \code{p}
 #'     with and without constraints.
 #'
@@ -15,7 +15,7 @@
 #' @inheritParams power.3m
 #'
 #' @param m total budget, default is the total costs of sampling 60
-#'     level-2 units.
+#'     sites.
 #' @param plot.by specify variance plot by \code{n} and/or \code{p};
 #'     default value is plot.by = list(n = "n", p = "p").
 #' @param plab the plot label for \code{p},
@@ -31,10 +31,6 @@
 #'
 #' @export od.2m
 #'
-#' @references
-#'   Shen, Z. (in progress). Using optimal sample allocation to
-#'   improve statistical precision and design efficiency for multilevel randomized trials
-#'   (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
 #'
 #' @examples
 #' # unconstrained optimal design #---------
@@ -128,8 +124,8 @@ od.2m <- function(n = NULL, p = NULL, icc = NULL,
   varlim <- limFun(x = varlim, y = c(0, 0.05))
   if (is.null(p)) {
     p.expr <- quote({
-     ((n * c1t - n * c1) * omega * (1 - r22m) * (1 - p)^2 + (1 - icc) *
-        (1 - r12)) * n * p^2 -
+     (c1t - c1) * omega * (1 - r22m) * n^2 * p^2 * (1 - p)^2 +
+        (1 - icc) * (1 - r12) * n * p^2 -
         (1 - 2 * p) * (1 - icc) * (1 - r12) * (n * c1 + c2)
     })
   }
@@ -197,8 +193,8 @@ od.2m <- function(n = NULL, p = NULL, icc = NULL,
   labFun <- function(x, y) {
     if (!is.null(x) && length(x) == 1 && is.character(x)) {x} else {y}
   }
-  nlab <- labFun(x = nlab, y = "Level-1 Sample Size: n")
-  plab <- labFun(x = plab, y = "Proportion Level-1 Units in Treatment: p")
+  nlab <- labFun(x = nlab, y = "Level-One Sample Size: n")
+  plab <- labFun(x = plab, y = "Proportion: p")
   varlab <- labFun(x = varlab, y = "Variance")
   vartitle <- labFun(x = vartitle, y = "")
   plotbyFun <- function(x, y) {

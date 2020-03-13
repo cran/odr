@@ -87,7 +87,7 @@ re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
     designType <- od$designType
   } else {
     stop("re function can only compare relative efficiency (RE) between
-         two studies with same design type")
+         two studies in the same type of design")
   }
   if (designType == "individual RCTs") {
     if (
@@ -114,6 +114,52 @@ re <- function(od, subod, rounded = TRUE, verbose = TRUE) {
       ((1 - p) * c1
        + p * c1t) *
       (p * (1 - p)) / (po * (1 - po))
+  } else if (designType == "single-level mediation experiments") {
+    if (
+      od$par$a != subod$par$a ||
+      od$par$b != subod$par$b ||
+      od$par$cp != subod$par$cp ||
+      od$par$c1 != subod$par$c1 ||
+      od$par$c1t != subod$par$c1t
+    ) {
+      stop("Each of 'a',  'b', 'cp',
+           'c1', and 'c1t'
+           must be equal in two designs")
+     } else {
+      a <- od$par$a
+      b <- od$par$b
+      cp <- od$par$cp
+      c1 <- od$par$c1
+      c1t <- od$par$c1t
+      if (rounded) {
+        if (is.null(od$out$p.sobel)){
+        po <- round(od$par$p, 2)
+        } else {
+        po <- round(od$out$p.sobel, 2)
+        }
+        if (is.null(subod$out$p.sobel)){
+          p <- round(subod$par$p, 2)
+        } else {
+          p <- round(subod$out$p.sobel, 2)
+        }
+      } else {
+        if (is.null(od$out$p.sobel)){
+        po <- od$par$p
+        } else {
+        po <- od$out$p.sobel
+        }
+        if (is.null(subod$out$p.sobel)){
+        p <- subod$par$p
+        } else {
+        p <- subod$out$p.sobel
+        }
+      }
+    }
+    re <- (a^2 * (1 - b^2) * po * (1 - po) + b^2) *
+      (po * c1t + (1 - po) * c1) * p * (1 -p) /
+      (a^2 * (1 - b^2) * p * (1 - p) + b^2)/
+      (p * c1t + (1 - p) * c1)/
+      (po * (1 - po))
   } else if (designType == "two-level CRTs") {
     if (
       od$par$icc != subod$par$icc ||

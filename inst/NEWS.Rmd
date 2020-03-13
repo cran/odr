@@ -14,6 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
+# updates (version 1.0.2)
+- update references
+- update documentation for these functions
 
 # updates (version 1.0.0)
 - Add functions (od.1 and power.1) for individual randomized controlled trials 

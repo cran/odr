@@ -31,7 +31,7 @@ each treatment condition.}
 \item{omega}{the standardized variance of site-specific treatment effect}
 
 \item{m}{total budget, default is the total costs of sampling 60
-level-2 units.}
+sites.}
 
 \item{plots}{logical, provide variance plots if TRUE, otherwise not; default value is TRUE.}
 
@@ -72,11 +72,11 @@ unconstrained or constrained optimal sample allocation
 \description{
 The optimal design of two-level
     multisite randomized trials (MRTs) is to choose
-    the sample allocation that minimizes the variance of
-    treatment effect under fixed budget and cost structure.
+    the sample allocation that minimizes the variance of a
+    treatment effect under a fixed budget and cost structure.
     The optimal design parameters include
-    the level-1 sample size per level-2 unit (\code{n})
-    and the proportion of level-2 unit to be assigned to treatment (\code{p}).
+    the level-one sample size per site (\code{n})
+    and the proportion of level-one unit to be assigned to treatment (\code{p}).
     This function solves the optimal \code{n} and/or \code{p}
     with and without constraints.
 }
@@ -120,9 +120,4 @@ The optimal design of two-level
   myre <- re(od = myod1, subod= myod4)
   myre$re # RE = 0.84
 
-}
-\references{
-Shen, Z. (in progress). Using optimal sample allocation to
-  improve statistical precision and design efficiency for multilevel randomized trials
-  (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
 }

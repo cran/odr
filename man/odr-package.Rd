@@ -4,26 +4,27 @@
 \name{odr-package}
 \alias{odr}
 \alias{odr-package}
-\title{Optimal Design and Statistical Power of Multilevel Randomized Trials}
+\title{Optimal design and statistical power of experimental studies assessing main and mediation effects}
 \description{
-This package is to help researchers design cost-efficient multilevel randomized trials
-    with adequate statistical precision by (1) solving optimal sample allocations,
-    (2) comparing design precision and efficiency between different sample allocations,
-    and (3) explicitly accommodating costs and budget in power analyses.
+This package is to help researchers design cost-efficient experimental studies
+    assessing main treatment effects
+    with adequate statistical precision by (a) solving optimal sample allocations,
+    (b) comparing design precision and efficiency between different sample allocations,
+    and (c) explicitly accommodating costs and budget in power analyses.
 }
 \details{
-The package covers seven types of trials with continuous outcomes and these trials are
+The package covers seven types of experiments aiming to detect
+    main effects on continuous
+    outcomes. These experiments are
     individual randomized controlled trials (RCTs), two-,
     three-, and four-level cluster-randomized trials (CRTs), and
     two-, three-, and four-level multisite randomized trials (MRTs).
     There are two categorical functions for each type of
-    trial and a uniform function for all types of trials.
+    experiments and a uniform function for all types of experiments.
     The two categorical functions are
     'od' and 'power'. The 'od' function can
-    calculate the optimal sample allocation with and without a constraint(s) for
-    each type of trial. The optimal design parameters in 'od' function
-    include the sample sizes at each level and
-    proportion of units to be assigned to the treatment condition.
+    calculate the optimal sample allocation with and without constraint for
+    each type of experiments.
     The 'power' function by default can calculate required budget
     (and required sample size) for desired
     power, minimum detectable effect size (MDES) under a fixed budget,
@@ -31,10 +32,11 @@ The package covers seven types of trials with continuous outcomes and these tria
     The 'power' function also can perform conventional power analyses
     (e.g., required sample size, power, MDES calculation).
     The uniform function 're' (or 'rpe') is to compare
-    the relative (precision and) efficiency between two designs with different sample allocations.
+    the relative (precision and) efficiency between two designs
+    with different sample allocations.
 }
 \author{
 Zuchao Shen, Ben Kelcey
 
-Maintainer: Zuchao Shen \href{mailto: shenzo@mail.uc.edu}{shenzo@mail.uc.edu}
+Maintainer: Zuchao Shen \href{mailto: zuchao.shen@gmail.com}{zuchao.shen@gmail.com}
 }

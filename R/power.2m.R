@@ -206,7 +206,7 @@ power.2m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
       pwr.expr <- quote({
         J <- m / ((1 - p) * c1 * n +  p * c1t * n + c2);
         lambda <- d * sqrt((p * (1 - p) * n * m / ((1 - p) * c1 * n +  p * c1t * n + c2)) /
-          (p * (1 - p) * n * omega * (1 - r22m) + icc * (1 - r12)));
+          (p * (1 - p) * n * omega * (1 - r22m) + (1 - icc) * (1 - r12)));
         1 - pt(qt(1 - sig.level / tside, df = (J - q2 - 1) * (n - q1 - 2)),
                df = (J - q2 - 1) * (n - q1 - 2), lambda) +
           pt(qt(sig.level / tside, df = (J - q2 - 1) * (n - q1 - 2)),
@@ -216,7 +216,7 @@ power.2m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
       pwr.expr <- quote({
         J <- m / ((1 - p) * c1 * n +  p * c1t * n + c2);
         lambda <- d * sqrt((p * (1 - p) * n * m / ((1 - p) * c1 * n +  p * c1t * n + c2)) /
-                             (p * (1 - p) * n * omega * (1 - r22m) + icc * (1 - r12)));
+                             (p * (1 - p) * n * omega * (1 - r22m) + (1 - icc) * (1 - r12)));
         1 - pt(qt(1 - sig.level / tside, (J - q2 - 1) * (n - q1 - 2)),
                df = (J - q2 - 1) * (n - q1 - 2), lambda)
       })
@@ -225,7 +225,7 @@ power.2m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
     if (two.tailed == TRUE) {
       pwr.expr <- quote({
         lambda <- d * sqrt((p * (1 - p) * n * J) /
-                             (p * (1 - p) * n * omega * (1 - r22m) + icc * (1 - r12)));
+                             (p * (1 - p) * n * omega * (1 - r22m) + (1 - icc) * (1 - r12)));
         1 - pt(qt(1 - sig.level / tside, df = (J - q2 - 1) * (n - q1 - 2)),
                df = (J - q2 - 1) * (n - q1 - 2), lambda) +
           pt(qt(sig.level / tside, df = (J - q2 - 1) * (n - q1 - 2)),
@@ -234,7 +234,7 @@ power.2m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
     } else {
       pwr.expr <- quote({
         lambda <- d * sqrt((p * (1 - p) * n * J) /
-                             (p * (1 - p) * n * omega * (1 - r22m) + icc * (1 - r12)));
+                             (p * (1 - p) * n * omega * (1 - r22m) + (1 - icc) * (1 - r12)));
         1 - pt(qt(1 - sig.level / tside, (J - q2 - 1) * (n - q1 - 2)),
                df = (J - q2 - 1) * (n - q1 - 2), lambda)
       })

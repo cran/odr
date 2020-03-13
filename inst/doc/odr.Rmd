@@ -13,13 +13,13 @@ vary across levels of hierarchy and treatment conditions due to the
 hierarchical sampling and the delivery of treatment. 
 This package is a tool to optimize the 
 designs of multilevel experimental studies such that the variances of 
-treatment effects are minimized under fixed budget and cost structure, or
+treatment effects are minimized under a fixed budget and cost structure, or
 the budget is minimized to achieve same level design precision or statistical power.
 The optimal sample allocation or optimal design parameters include 
 
 - the optimal sample sizes at each of the levels except the top level because the top-level
-sample size will be determined by total budget once all other parameters are decided
-- proportion of units to be assigned to treatment condition 
+sample size will be determined by total budget or power once all other parameters are decided
+- proportion of units to be assigned to the treatment condition 
 at the level of randomization
 
 This package includes three categorical of functions and they are
@@ -27,19 +27,20 @@ This package includes three categorical of functions and they are
 - *od* function: This function calculates optimal sample allocation parameters with and without 
 constraint(s). For each type of multilevel experimental studies, there is an additional number (and/or
 additional letter) to be added to the general function name. For example, the function for 
-two-level cluster randomized trials (CRTs) is *od.2*,
-the function for 2-level multisite cluster randomized trials is *od.2m*.
+two-level cluster randomized trials is *od.2*,
+the function for two-level multisite randomized trials is *od.2m*, 
+the function for single-level experiments assessing mediation effects is *od.1.m*.
 
-- *power* function: This function performs power analyses with and without accommodating costs.
-For power analysis accommodating costs, the function calculates required budget and required sample size, 
-statistical power, minimum detectable effect size. For conventional power analysis without accommodating costs,
-this function calculates required sample size, statistical power, minimum detectable effect size. 
+- *power* function: This function performs power analyses with and without accommodating cost structures of sampling.
+For power analysis accommodating cost structures, depending on which one parameter is left, the function calculates required budget (and sample size), statistical power, and minimum detectable effect size. For conventional power analysis without accommodating cost structures of sampling,
+this function calculates required sample size, statistical power, and minimum detectable effect size. 
 For each type of multilevel experimental studies, there is an additional number (and/or
 additional letter) to be added to the general function name. For example, the function for 
-two-level cluster randomized trials (CRTs) is *power.2*,
-the function for 2-level multisite cluster randomized trials is *power.2m*.
+two-level cluster randomized trials is *power.2*,
+the function for two-level multisite randomized trials is *power.2m*,
+the function for single-level experiments assessing mediation effects is *power.1.m*.
 
-- *re* function: This function calculates relative efficiency values between two designs.
+- *re* function: This function calculates relative efficiency values between two designs. An alternative name for this function is *rpe* that stands for "relative precision and efficiency".
 
 
 ## 1. Function *od* 
@@ -47,18 +48,17 @@ Given cost structure (i.e., the costs of sampling each unit at
 different levels and treatment conditions), this function solves 
 the optimal sample allocation with and without constraints. 
 
-To solve the optimal sample allocation of a two-level CRT, 
+To solve the optimal sample allocation of a two-level cluster-randomized trial, 
 we need the following information
 
-- icc: intraclass correlation coefficient in the population or in each treatment condition
-- r12: the proportion of level-1 outcome variance explained by covariates in the population or in each treatment condition
-- r22: the proportion of level-2 outcome variance explained by covariates in the population or in each treatment condition
-- c1: the cost of sampling each additional level-1 unit in control condition 
-- c2: the cost of sampling each additional level-2 unit in control condition 
-- c1t: the cost of sampling each additional level-1 unit in treatment condition 
-- c2t: the cost of sampling each additional level-2 unit in treatment condition
-- m: total fixed budget used to plot the variance curves, default is the cost of sampling 60 level-2 units
-across treatment conditions.
+- icc: intraclass correlation coefficient
+- r12: the proportion of level-one outcome variance explained by covariates
+- r22: the proportion of level-two outcome variance explained by covariates
+- c1: the cost of sampling each additional level-one unit in the control condition 
+- c2: the cost of sampling each additional level-two unit in the control condition 
+- c1t: the cost of sampling each additional level-one unit in the experimental condition 
+- c2t: the cost of sampling each additional level-two unit in the experimental condition
+- m: a total fixed budget used to plot the variance curves, default value is the cost of sampling 60 level-two units across treatment conditions.
 
 ### 1.1 Examples
 ```{r}
@@ -69,7 +69,7 @@ library(odr)
  # unconstrained optimal design
 myod1 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50, 
               varlim = c(0.01, 0.02))
- # The function by default prints messages of output and plots the variance curves; one can turn off message and specify one or no plot; default m value is the total costs of sampling 60 level-2 units across treatment conditions, m can be explicitly specified.
+ # The function by default prints messages of output and plots the variance curves; one can turn off message and specify one or no plot.
  # myod1$out # output; 
  # myod1$par # parameters used in the calculation.
 ```
@@ -97,9 +97,9 @@ myod4 <- od.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50
 ```
 
 ### 1.2 Examples for other types of trials
-Please see examples in corresponding functions by uncomment below lines.
+Please see examples in corresponding functions by uncommenting below lines.
 ```{r}
-# ?od.1
+# ?od.1 
 # ?od.3
 # ?od.4
 # ?od.2m
@@ -118,7 +118,7 @@ required budget (and required sample size) to achieve desired power level to det
 
 This function also can conduct conventional power analysis or power analysis wihout 
 accommodating cost structures by specifying cost.model = FALSE, the conventional
-power analyses include statistical power calculation, MDES calculation, 
+power analyses include statistical power calculation, minimum detectable effect size calculation, 
 and required sample size calculation.
 
 ### 2.1 Examples of power analyses accommodating cost structures (cost.model = TRUE)
@@ -176,13 +176,16 @@ plot(prange, pwr, type = "l", lty = 1, xlim = c(0, 1), ylim = c(0.1, 0.9),
  par(figure)
 ```
 
-###### MDES (minimum detectable effect size) under a fixed budget
-- MDES calculation
+###### Minimum detectable effect size under a fixed budget
+- minimum detectable effect size calculation
 ```{r}
 mymdes <- power.2(expr = myod1, q = 1, power = 0.80, m = 1702)
+# above experssion takes parameters and outputs from od.2 function. Equivalently, each parameter can be explicitly specified.
+# mym <- power.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
+#                     n = 9, p = 0.33, d = 0.3, q = 1, power = 0.8)
 # mymdes$out  # d = 0.30
 ```
-- Effects on MDES under same budget when designs depart from the optimal one 
+- Effects on minimum detectable effect size under same budget when designs depart from the optimal one 
 ```{r fig.width = 7, fig.height = 3.5}
 figure <- par(mfrow = c (1, 2))
 MDES <- NULL
@@ -208,7 +211,7 @@ plot(prange, MDES, type = "l", lty = 1, xlim = c(0, 1), ylim = c(0.3, 0.8),
 # Required level-2 sample size calculation
 myJ <- power.2(cost.model = FALSE, expr = myod1, d = 0.3, q = 1, power = 0.8)
 # above experssion takes parameters and outputs from od.2 function. Equivalently, each parameter can be explicitly specified.
-# myJ <- power.2(icc = 0.2, r12 = 0.5, r22 = 0.5, c1 = 1, c2 = 5, c1t = 1, c2t = 50,
+# myJ <- power.2(icc = 0.2, r12 = 0.5, r22 = 0.5, 
 #                     cost.model = FALSE, n = 9, p = 0.33, d = 0.3, q = 1, power = 0.8)
 myJ$out  # J = 59
 
@@ -216,7 +219,7 @@ myJ$out  # J = 59
 mypower1 <- power.2(cost.model = FALSE, expr = myod1, J = 59, d = 0.3, q = 1)
 mypower1$out  # power = 0.80
 
-# MDES calculation
+# Minimum detectable effect size calculation
 mymdes1 <- power.2(cost.model = FALSE, expr = myod1, J = 59, power = 0.8, q = 1)
 mymdes1$out  # d = 0.30
 ```
@@ -242,7 +245,7 @@ par(figure)
 ```
 
 ### 2.4 Examples for other types of trials
-Please see examples in corresponding functions by uncomment below lines (e.g., type ?power.3).
+Please see examples in corresponding functions by uncommenting below lines.
 ```{r}
 # ?power.1
 # ?power.3
@@ -256,22 +259,22 @@ Please see examples in corresponding functions by uncomment below lines (e.g., t
 Calculate the relative efficiency (RE) of two designs, this function uses the returns from *od* function
 
 ### 3.1 Examples
-Based on above examples in *od* function, calculate the relative efficiency
+Based on above examples in *od* functions, calculate the relative efficiency
 ```{r}
-# relative efficiency (RE) of constrained design comparing with the unconstrained design
+# relative efficiency (RE) of a constrained design comparing with the optimal design
 myre <- re(od = myod1, subod= myod2)
 myre$re # get the output (i.e., RE = 0.88)
 
-# relative efficiency (RE) constrained design comparing with the unconstrained optimal one
+# relative efficiency (RE) of a constrained design comparing with the unconstrained optimal one
 myre <- re(od = myod1, subod= myod3)
 
-# relative efficiency (RE) constrained design comparing with the unconstrained optimal one
+# relative efficiency (RE) of a constrained design comparing with the unconstrained optimal one
 myre <- re(od = myod1, subod= myod4)
 
 
 ```
 ### 3.2 Examples for other types of trials
-Please see examples in corresponding functions by uncomment the below lines.
+For additional examples, please see example sections in corresponding *od* functions by uncommenting below lines.
 ```{r}
 # ?od.1
 # ?od.2
