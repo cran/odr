@@ -1,4 +1,5 @@
-#' Budget and/or sample size, power, MDES calculation for four-level multisite randomized trials
+#' Budget and/or sample size, power, MDES calculation for
+#' four-level MRTs detecting main effects
 #'
 #' @description This function can calculate required budget for desired power,
 #'     power or minimum detectable effect size (MDES) under fixed budget
@@ -8,7 +9,7 @@
 #'
 #' @inheritParams power.4
 #'
-#' @param expr returned objects from function \code{\link{od.4m}}; default is NULL;
+#' @param expr Returned objects from function \code{\link{od.4m}}; default is NULL;
 #'     if \code{expr} is specified, parameter values of \code{icc2}, \code{icc3}, \code{icc4},
 #'     \code{r12}, \code{r22}, \code{r32}, \code{r42m},
 #'     \code{c1}, \code{c2}, \code{c3}, \code{c4},
@@ -18,16 +19,15 @@
 #'     only the values of \code{p}, \code{n}, \code{J}, and/or \code{K} that specified or solved in
 #'     function \code{\link{od.4m}} can be overwritten
 #'     if \code{constraint} is specified.
-#' @param constraint specify the constrained values of \code{p}, \code{n}, \code{J},
+#' @param constraint The constrained values of \code{p}, \code{n}, \code{J},
 #'     and/or \code{K} in list format to overwrite
 #'     those from \code{expr}; default value is NULL.
-#' @param omega the standardized variance of site-specific treatment effect
-#' @param r42m the proportion of variance of site-specific treatment effect explained by covariates.
-#' @param c4 the cost of sampling one level-4 unit.
-#' @param p the proportion of level-3 units to be assigned to treatment.
-#' @param q4 the number of covariates at level 4.
-#' @param q3 the number of covariates at level 3.
-#' @param mlim the range for searching the root of budget (\code{m}) numerically,
+#' @param omega The standardized variance of site-specific treatment effect.
+#' @param r42m The proportion of variance of site-specific treatment effect explained by covariates.
+#' @param c4 The cost of sampling one level-4 unit.
+#' @param p The proportion of level-3 units to be assigned to treatment.
+#' @param q The number of covariates at level 4.
+#' @param mlim The range for searching the root of budget (\code{m}) numerically,
 #'     default is the costs sampling \code{Llim} level-4 units
 #'     or c(4 * Lcost, 1e+10 * Lcost) with Lcost =
 #'     ((1 - p) * (c1 * n * J * K + c2 * J * K + c3 * K) +
@@ -40,13 +40,8 @@
 #'
 #' @export power.4m
 #'
-#' @references
-#'   Shen, Z. (in progress). Using optimal sample allocation to
-#'   improve statistical precision and design efficiency for multilevel randomized trials
-#'   (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
-#'
 #' @examples
-#' # unconstrained optimal design #---------
+#' # Unconstrained optimal design #---------
 #'   myod1 <- od.4m(icc2 = 0.2, icc3 = 0.1, icc4 = 0.05, omega = 0.02,
 #'               r12 = 0.5, r22 = 0.5, r32 = 0.5, r42m = 0.5,
 #'               c1 = 1, c2 = 5, c3 = 25,
@@ -54,47 +49,47 @@
 #'               varlim = c(0, 0.005))
 #'   myod1$out # n = 8.3, J = 3.2, K = 4.9, p = 0.36
 #'
-#' # ------- power analyses by default considering costs and budget -------
-#' # required budget and sample size
-#'   mym.1 <- power.4m(expr = myod1, d = 0.2, q3 = 1, q4 = 1, power = 0.8)
-#'   mym.1$out  # m = 28668, L = 19.5
+#' # ------- Power analyses by default considering costs and budget -------
+#' # Required budget and sample size
+#'   mym.1 <- power.4m(expr = myod1, d = 0.2, q = 1, power = 0.8)
+#'   mym.1$out  # m = 30201, L = 20.6
 #'   # mym.1$par  # parameters and their values used for the function
-#' # or equivalently, specify every argument in the function
-#'   mym.1 <- power.4m(d = 0.2, power = 0.8, q3 = 1, q4 = 1,
+#' # Or, equivalently, specify every argument in the function
+#'   mym.1 <- power.4m(d = 0.2, power = 0.8, q = 1,
 #'                  icc2 = 0.2, icc3 = 0.1, icc4 = 0.05, omega = 0.02,
 #'                  r12 = 0.5, r22 = 0.5, r32 = 0.5, r42m = 0.5,
 #'                  c1 = 1, c2 = 5, c3 = 25,
 #'                  c1t = 1, c2t = 50, c3t = 250, c4 = 500,
 #'                  n = 8, J = 3, K = 5, p = 0.36)
-#' # required budget and sample size with constrained p
-#'   mym.2 <- power.4m(expr = myod1, d = 0.2, q3 = 1, q4 = 1, power = 0.8,
+#' # Required budget and sample size with constrained p
+#'   mym.2 <- power.4m(expr = myod1, d = 0.2, q = 1, power = 0.8,
 #'                  constraint = list(p = 0.5))
-#'   mym.2$out  # m = 31379, L = 18.2
-#' # required budget and sample size with constrained p and n
-#'   mym.3 <- power.4m(expr = myod1, d = 0.2, q3 = 1, q4 = 1, power = 0.8,
+#'   mym.2$out  # m = 33183, L = 19.3
+#' # Required budget and sample size with constrained p and n
+#'   mym.3 <- power.4m(expr = myod1, d = 0.2, q = 1, power = 0.8,
 #'                  constraint = list(p = 0.5, n = 20))
-#'   mym.3$out  # m = 32257, L = 17.0
+#'   mym.3$out  # m = 34262, L = 18.0
 #'
 #' # Power calculation
-#'   mypower <- power.4m(expr = myod1, q3 = 1, q4 = 1, d = 0.2, m = 28668)
+#'   mypower <- power.4m(expr = myod1, q = 1, d = 0.2, m = 30201)
 #'   mypower$out  # power = 0.80
 #' # Power calculation under constrained p (p = 0.5)
-#'   mypower.1 <- power.4m(expr = myod1, q3 = 1, q4 = 1, d = 0.2, m = 28668,
+#'   mypower.1 <- power.4m(expr = myod1, q = 1, d = 0.2, m = 30201,
 #'                  constraint = list(p = 0.5))
 #'   mypower.1$out  # power = 0.76
 #'
 #' # MDES calculation
-#'   mymdes <- power.4m(expr = myod1, q3 = 1, q4 = 1, power = 0.80, m = 28668)
+#'   mymdes <- power.4m(expr = myod1, q = 1, power = 0.80, m = 30201)
 #'   mymdes$out  # d = 0.20
 #'
 #'
-#' # ------- conventional power analyses with cost.model = FALSE-------
+#' # ------- Conventional power analyses with cost.model = FALSE-------
 #' # Required sample size
-#'   myL <- power.4m(cost.model = FALSE, expr = myod1, d = 0.2, q3 = 1, q4 = 1, power = 0.8)
-#'   myL$out  # L = 19.5
+#'   myL <- power.4m(cost.model = FALSE, expr = myod1, d = 0.2, q = 1, power = 0.8)
+#'   myL$out  # L = 20.6
 #'   # myL$par  # parameters and their values used for the function
-#' # or equivalently, specify every argument in the function
-#'   myL <- power.4m(cost.model = FALSE, d = 0.2, power = 0.8, q3 = 1, q4 = 1,
+#' # Or, equivalently, specify every argument in the function
+#'   myL <- power.4m(cost.model = FALSE, d = 0.2, power = 0.8, q = 1,
 #'                   icc2 = 0.2, icc3 = 0.1, icc4 = 0.05, omega = 0.02,
 #'                  r12 = 0.5, r22 = 0.5, r32 = 0.5, r42m = 0.5,
 #'                  c1 = 1, c2 = 5, c3 = 25,
@@ -102,11 +97,11 @@
 #'                  n = 8, J = 3, K = 5, p = 0.36)
 #'
 #' # Power calculation
-#'   mypower1 <- power.4m(cost.model = FALSE, expr = myod1, L = 19.5, d = 0.2, q3 = 1, q4 = 1)
+#'   mypower1 <- power.4m(cost.model = FALSE, expr = myod1, L = 20.6, d = 0.2, q = 1)
 #'   mypower1$out  # power = 0.80
 #'
 #' # MDES calculation
-#'   mymdes1 <- power.4m(cost.model = FALSE, expr = myod1, L = 19.5, power = 0.8, q3 = 1, q4 = 1)
+#'   mymdes1 <- power.4m(cost.model = FALSE, expr = myod1, L = 20.6, power = 0.8, q = 1)
 #'   mymdes1$out  # d = 0.20
 #'
 power.4m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
@@ -114,7 +109,7 @@ power.4m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
                     d = NULL, power = NULL, m = NULL,
                     n = NULL, J = NULL, K = NULL, L = NULL, p = NULL,
                     icc2 = NULL, icc3 = NULL, icc4 = NULL,
-                    r12 = NULL, r22 = NULL, r32 = NULL, r42m = NULL, q3 = NULL, q4 = NULL,
+                    r12 = NULL, r22 = NULL, r32 = NULL, r42m = NULL, q = NULL,
                     c1 = NULL, c2 = NULL, c3 = NULL, c4 = NULL,
                     c1t = NULL, c2t = NULL, c3t = NULL, omega = NULL,
                     dlim = NULL, powerlim = NULL, Llim = NULL, mlim = NULL,
@@ -216,10 +211,8 @@ power.4m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
     if (NumberCheck(m))
       stop("'m' must be numeric in [0, Inf)")
   }
-  if (NumberCheck(q3) | q3 < 0)
-    stop("'q3' must be numeric with q3 >= 0")
-  if (NumberCheck(q4) | q4 < 0)
-    stop("'q4' must be numeric with q4 >= 0")
+  if (NumberCheck(q) | q < 0)
+    stop("'q' must be numeric with q >= 0")
   if (NumberCheck(n) || n <= 0)
     stop("'n' must be numeric with n > 0")
   if (NumberCheck(J) || J <= 0)
@@ -237,7 +230,7 @@ power.4m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
               c1 = c1, c2 = c2, c3 = c3, c4 = c4,
               c1t = c1t, c2t = c2t, c3t = c3t, omega = omega,
               n = n, J = J, K = K, L = L, p = p,
-              q3  = q3, q4 = q4, m = m, power = power)
+              q = q, m = m, power = power)
   tside <- ifelse(two.tailed == TRUE, 2, 1)
   if (cost.model == TRUE) {
     Lcost <- ((1 - p) * (c1 * n * J * K + c2 * J * K + c3 * K) +
@@ -251,10 +244,10 @@ power.4m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
           (p * (1 - p) * n * J * K * omega * (1 - r42m) + n * J * icc3 * (1 - r32) +
                  n * icc2 * (1 - r22)  +
                  (1 - icc2 - icc3 - icc4) * (1 - r12)));
-        1 - pt(qt(1 - sig.level / tside, df = (L - q4 - 1) * (K - q3 - 2)),
-               df = (L - q4 - 1) * (K - q3 - 2), lambda) +
-          pt(qt(sig.level / tside, df = (L - q4 - 1) * (K - q3 - 2)),
-             df = (L - q4 - 1) * (K - q3 - 2), lambda)
+        1 - pt(qt(1 - sig.level / tside, df = (L - q - 1)),
+               df = (L - q - 1), lambda) +
+          pt(qt(sig.level / tside, df = (L - q -1)),
+             df = (L - q -1), lambda)
       })
     } else {
       pwr.expr <- quote({
@@ -265,8 +258,8 @@ power.4m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
           (p * (1 - p) * n * J * K * omega * (1 - r42m) + n * J * icc3 * (1 - r32) +
                  n * icc2 * (1 - r22)  +
                  (1 - icc2 - icc3 - icc4) * (1 - r12)));
-        1 - pt(qt(1 - sig.level / tside, df = (L - q4 - 1) * (K - q3 - 2)),
-               df = (L - q4 - 1) * (K - q3 - 2), lambda)
+        1 - pt(qt(1 - sig.level / tside, df = (L - q -1)),
+               df = (L - q -1), lambda)
       })
     }
   } else {
@@ -276,10 +269,10 @@ power.4m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
           sqrt(p * (1 - p) * n * J * K * omega * (1 - r42m) + n * J * icc3 * (1 - r32) +
                  n * icc2 * (1 - r22)  +
                  (1 - icc2 - icc3 - icc4) * (1 - r12));
-        1 - pt(qt(1 - sig.level / tside, df = (L - q4 - 1) * (K - q3 - 2)),
-               df = (L - q4 - 1) * (K - q3 - 2), lambda) +
-          pt(qt(sig.level / tside, df = (L - q4 - 1) * (K - q3 - 2)),
-             df = (L - q4 - 1) * (K - q3 - 2), lambda)
+        1 - pt(qt(1 - sig.level / tside, df = (L - q -1)),
+               df = (L - q -1), lambda) +
+          pt(qt(sig.level / tside, df = (L - q -1)),
+             df = (L - q -1), lambda)
       })
     } else {
       pwr.expr <- quote({
@@ -287,8 +280,8 @@ power.4m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
           sqrt(p * (1 - p) * n * J * K * omega * (1 - r42m) + n * J * icc3 * (1 - r32) +
                  n * icc2 * (1 - r22)  +
                  (1 - icc2 - icc3 - icc4) * (1 - r12));
-        1 - pt(qt(1 - sig.level / tside, df = (L - q4 - 1) * (K - q3 - 2)),
-               df = (L - q4 - 1) * (K - q3 - 2), lambda)
+        1 - pt(qt(1 - sig.level / tside, df = (L - q -1)),
+               df = (L - q -1), lambda)
       })
     }
   }

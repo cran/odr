@@ -1,4 +1,5 @@
-#' Budget and/or sample size, power, MDES calculation for three-level multisite randomized trials
+#' Budget and/or sample size, power, MDES calculation for
+#' three-level MRTs detecting main effects
 #'
 #' @description This function can calculate required budget for desired power,
 #'     power or minimum detectable effect size (MDES) under fixed budget
@@ -10,7 +11,7 @@
 #' @inheritParams power.3
 #' @inheritParams power.4m
 #'
-#' @param expr returned objects from function \code{\link{od.3m}}; default is NULL;
+#' @param expr Returned objects from function \code{\link{od.3m}}; default is NULL;
 #'     if \code{expr} is specified, parameter values of \code{icc2}, \code{icc3},
 #'     \code{r12}, \code{r22}, \code{r32m},
 #'     \code{c1}, \code{c2}, \code{c3},
@@ -20,15 +21,14 @@
 #'     only the values of \code{p}, \code{n}, and/or \code{J} that specified or solved in
 #'     function \code{\link{od.3m}} can be overwritten
 #'     if \code{constraint} is specified.
-#' @param constraint specify the constrained values of \code{p}, \code{n}, and/or \code{J},
+#' @param constraint Specify the constrained values of \code{p}, \code{n}, and/or \code{J},
 #'     in list format to overwrite
 #'     those from \code{expr}; default value is NULL.
-#' @param r32m the proportion of variance of site-specific treatment effect explained by covariates.
-#' @param c3 the cost of sampling one level-3 unit.
-#' @param p the proportion of level-2 units to be assigned to treatment.
-#' @param q3 the number of covariates at level 3.
-#' @param q2 the number of covariates at level 2.
-#' @param mlim the range for searching the root of budget (\code{m}) numerically,
+#' @param r32m The proportion of variance of site-specific treatment effect explained by covariates.
+#' @param c3 The cost of sampling one level-3 unit.
+#' @param p The proportion of level-2 units to be assigned to treatment.
+#' @param q The number of covariates at level 3.
+#' @param mlim The range for searching the root of budget (\code{m}) numerically,
 #'     default is the costs sampling \code{Klim} level-3 units
 #'     or c(4 * Kcost, 1e+10 * Kcost) with Kcost =
 #'     ((1 - p) * (c1 * n * J + c2 * J) +
@@ -42,60 +42,59 @@
 #' @export power.3m
 #'
 #' @references
-#'   Shen, Z. (in progress). Using optimal sample allocation to
-#'   improve statistical precision and design efficiency for multilevel randomized trials
-#'   (Unpublished doctoral dissertation). University of Cincinnati, Cincinnati, OH.
+#'   Shen, Z., & Kelcey, B. (in press). Optimal sampling ratios in three-level
+#'   multisite experiments. Journal of Research on Educational Effectiveness.
 #'
 #' @examples
-#' # unconstrained optimal design #---------
+#' # Unconstrained optimal design #---------
 #'   myod1 <- od.3m(icc2 = 0.2, icc3 = 0.1, omega = 0.02,
 #'               r12 = 0.5, r22 = 0.5, r32m = 0.5,
 #'               c1 = 1, c2 = 5,
 #'               c1t = 1, c2t = 200, c3 = 200,
 #'               varlim = c(0, 0.005))
-#'   myod1$out # n = 13, J = 15, p = 0.23
+#'   myod1$out # n = 13.1, J = 15.3, p = 0.23
 #'
-#' # ------- power analyses by default considering costs and budget -------
-#' # required budget and sample size
-#'   mym.1 <- power.3m(expr = myod1, d = 0.2, q2 = 1, q3 = 1, power = 0.8)
-#'   mym.1$out  # m = 13177, K = 11.5
+#' # ------- Power analyses by default considering costs and budget -------
+#' # Required budget and sample size
+#'   mym.1 <- power.3m(expr = myod1, d = 0.2, q = 1, power = 0.8)
+#'   mym.1$out  # m = 15491, K = 13.6
 #'   # mym.1$par  # parameters and their values used for the function
-#' # or equivalently, specify every argument in the function
-#'   mym.1 <- power.3m(d = 0.2, power = 0.8, q2 = 1, q3 = 1,
+#' # Or, equivalently, specify every argument in the function
+#'   mym.1 <- power.3m(d = 0.2, power = 0.8, q = 1,
 #'                  icc2 = 0.2, icc3 = 0.1, omega = 0.02,
 #'                   r12 = 0.5, r22 = 0.5, r32m = 0.5,
 #'                   c1 = 1, c2 = 5,
 #'                   c1t = 1, c2t = 200, c3 = 200,
 #'                   n = 13, J = 15, p = 0.23)
-#' # required budget and sample size with constrained p
-#'   mym.2 <- power.3m(expr = myod1, d = 0.2, q2 = 1, q3 = 1, power = 0.8,
+#' # Required budget and sample size with constrained p
+#'   mym.2 <- power.3m(expr = myod1, d = 0.2, q = 1, power = 0.8,
 #'                  constraint = list(p = 0.5))
-#'   mym.2$out  # m = 17026, K = 8.8
-#' # required budget and sample size with constrained p and n
-#'   mym.3 <- power.3m(expr = myod1, d = 0.2, q2 = 1, q3 = 1, power = 0.8,
+#'   mym.2$out  # m = 21072, K = 10.9
+#' # Required budget and sample size with constrained p and n
+#'   mym.3 <- power.3m(expr = myod1, d = 0.2, q = 1, power = 0.8,
 #'                  constraint = list(p = 0.5, n = 20))
-#'   mym.3$out  # m = 16954, K = 8.3
+#'   mym.3$out  # m = 21252, K = 10.4
 #'
 #' # Power calculation
-#'   mypower <- power.3m(expr = myod1, q2 = 1, q3 = 1, d = 0.2, m = 13177)
+#'   mypower <- power.3m(expr = myod1, q = 1, d = 0.2, m = 15491)
 #'   mypower$out  # power = 0.80
 #' # Power calculation under constrained p (p = 0.5)
-#'   mypower.1 <- power.3m(expr = myod1, q2 = 1, q3 = 1, d = 0.2, m = 13177,
+#'   mypower.1 <- power.3m(expr = myod1, q = 1, d = 0.2, m = 15491,
 #'                  constraint = list(p = 0.5))
-#'   mypower.1$out  # power = 0.69
+#'   mypower.1$out  # power = 0.62
 #'
 #' # MDES calculation
-#'   mymdes <- power.3m(expr = myod1, q2 = 1, q3 = 1, power = 0.80, m = 13176)
+#'   mymdes <- power.3m(expr = myod1, q = 1, power = 0.80, m = 15491)
 #'   mymdes$out  # d = 0.20
 #'
 #'
-#' # ------- conventional power analyses with cost.model = FALSE-------
+#' # ------- Conventional power analyses with cost.model = FALSE-------
 #' # Required sample size
-#'   myK <- power.3m(cost.model = FALSE, expr = myod1, d = 0.2, q2 = 1, q3 = 1, power = 0.8)
-#'   myK$out  # K = 11.5
+#'   myK <- power.3m(cost.model = FALSE, expr = myod1, d = 0.2, q = 1, power = 0.8)
+#'   myK$out  # K = 13.6
 #'   # myK$par  # parameters and their values used for the function
-#' # or equivalently, specify every argument in the function
-#'   myK <- power.3m(cost.model = FALSE, d = 0.2, power = 0.8, q2 = 1, q3 = 1,
+#' # Or, equivalently, specify every argument in the function
+#'   myK <- power.3m(cost.model = FALSE, d = 0.2, power = 0.8, q = 1,
 #'                   icc2 = 0.2, icc3 = 0.1, omega = 0.02,
 #'                   r12 = 0.5, r22 = 0.5, r32m = 0.5,
 #'                   c1 = 1, c2 = 5,
@@ -103,11 +102,11 @@
 #'                   n = 13, J = 15, p = 0.23)
 #'
 #' # Power calculation
-#'   mypower1 <- power.3m(cost.model = FALSE, expr = myod1, K = 11.5, d = 0.2, q2 = 1, q3 = 1)
+#'   mypower1 <- power.3m(cost.model = FALSE, expr = myod1, K = 13.6, d = 0.2, q = 1)
 #'   mypower1$out  # power = 0.80
 #'
 #' # MDES calculation
-#'   mymdes1 <- power.3m(cost.model = FALSE, expr = myod1, K = 11.5, power = 0.8, q2 = 1, q3 = 1)
+#'   mymdes1 <- power.3m(cost.model = FALSE, expr = myod1, K = 13.6, power = 0.8, q = 1)
 #'   mymdes1$out  # d = 0.20
 #'
 power.3m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
@@ -115,7 +114,7 @@ power.3m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
                     d = NULL, power = NULL, m = NULL,
                     n = NULL, J = NULL, K = NULL, p = NULL,
                     icc2 = NULL, icc3 = NULL,
-                    r12 = NULL, r22 = NULL, r32m = NULL, q2 = NULL, q3 = NULL,
+                    r12 = NULL, r22 = NULL, r32m = NULL, q = NULL,
                     c1 = NULL, c2 = NULL, c3 = NULL,
                     c1t = NULL, c2t = NULL, omega = NULL,
                     dlim = NULL, powerlim = NULL, Klim = NULL, mlim = NULL,
@@ -192,13 +191,13 @@ power.3m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
       stop("constrained 'p' must be numeric in (0, 1)")
     p <- constraint$p
   }
-  if (sum(sapply(list(icc2, icc3, p, power, sig.level), function(x) {
+  if (sum(sapply(list(p, power, sig.level), function(x) {
     NumberCheck(x) || any(0 > x | x >= 1)
-  })) >= 1) stop("'icc2', 'icc3', 'p', 'power', and 'sig.level'
+  })) >= 1) stop("'p', 'power', and 'sig.level'
                  must be numeric in (0, 1)")
-  if (sum(sapply(list(r12, r22, r32m), function(x) {
-    NumberCheck(x) || any(0 > x | x >= 1)
-  })) >= 1) stop("'r12', 'r22', and 'r32m' must be numeric in [0, 1)")
+  if (sum(sapply(list(icc2, icc3, r12, r22, r32m), function(x) {
+    NumberCheck(x) || any(0 > x | x > 1)
+  })) >= 1) stop("'icc2', 'icc3', 'r12', 'r22', and 'r32m' must be numeric in [0, 1]")
   if (cost.model == TRUE){
     if (sum(sapply(list(c1, c2, c3, c1t, c2t), function(x) {
       NumberCheck(x) || x < 0})) >= 1)
@@ -206,10 +205,8 @@ power.3m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
     if (NumberCheck(m))
       stop("'m' must be numeric in [0, Inf)")
   }
-  if (NumberCheck(q2) | q2 < 0)
-    stop("'q2' must be numeric with q2 >= 0")
-  if (NumberCheck(q3) | q3 < 0)
-    stop("'q3' must be numeric with q3 >= 0")
+  if (NumberCheck(q) | q < 0)
+    stop("'q' must be numeric with q >= 0")
   if (NumberCheck(n) || n <= 0)
     stop("'n' must be numeric with n > 0")
   if (NumberCheck(J) || J <= 0)
@@ -225,7 +222,7 @@ power.3m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
               c1 = c1, c2 = c2, c3 = c3,
               c1t = c1t, c2t = c2t, omega = omega,
               n = n, J = J, p = p,
-              q3  = q3, q2 = q2, m = m, power = power)
+              q = q, m = m, power = power)
   tside <- ifelse(two.tailed == TRUE, 2, 1)
   if (cost.model == TRUE) {
     Kcost <- ((1 - p) * (c1 * n * J + c2 * J) +
@@ -239,10 +236,10 @@ power.3m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
           (p * (1 - p) * n * J * omega * (1 - r32m) +
                  n * icc2 * (1 - r22)  +
                  (1 - icc2 - icc3) * (1 - r12)));
-        1 - pt(qt(1 - sig.level / tside, df = (K - q3 - 1) * (J - q2 - 2)),
-               df = (K - q3 - 1) * (J - q2 - 2), lambda) +
-          pt(qt(sig.level / tside, df = (K - q3 - 1) * (J - q2 - 2)),
-             df = (K - q3 - 1) * (J - q2 - 2), lambda)
+        1 - pt(qt(1 - sig.level / tside, df = (K - q - 1)),
+               df = (K - q - 1) , lambda) +
+          pt(qt(sig.level / tside, df = (K - q - 1) ),
+             df = (K - q - 1) , lambda)
       })
     } else {
       pwr.expr <- quote({
@@ -253,8 +250,8 @@ power.3m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
                              (p * (1 - p) * n * J * omega * (1 - r32m) +
                                 n * icc2 * (1 - r22)  +
                                 (1 - icc2 - icc3) * (1 - r12)));
-        1 - pt(qt(1 - sig.level / tside, df = (K - q3 - 1) * (J - q2 - 2)),
-               df = (K - q3 - 1) * (J - q2 - 2), lambda)
+        1 - pt(qt(1 - sig.level / tside, df = (K - q - 1)),
+               df = (K - q - 1), lambda)
       })
     }
   } else {
@@ -264,10 +261,10 @@ power.3m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
                              (p * (1 - p) * n * J * omega * (1 - r32m) +
                                 n * icc2 * (1 - r22)  +
                                 (1 - icc2 - icc3) * (1 - r12)));
-        1 - pt(qt(1 - sig.level / tside, df = (K - q3 - 1) * (J - q2 - 2)),
-               df = (K - q3 - 1) * (J - q2 - 2), lambda) +
-          pt(qt(sig.level / tside, df = (K - q3 - 1) * (J - q2 - 2)),
-             df = (K - q3 - 1) * (J - q2 - 2), lambda)
+        1 - pt(qt(1 - sig.level / tside, df = (K - q - 1) ),
+               df = (K - q - 1) , lambda) +
+          pt(qt(sig.level / tside, df = (K - q - 1)),
+             df = (K - q - 1), lambda)
       })
     } else {
       pwr.expr <- quote({
@@ -275,8 +272,8 @@ power.3m <- function(cost.model = TRUE, expr = NULL, constraint = NULL,
           (p * (1 - p) * n * J * omega * (1 - r32m) +
                  n * icc2 * (1 - r22)  +
                  (1 - icc2 - icc3) * (1 - r12)));
-        1 - pt(qt(1 - sig.level / tside, df = (K - q3 - 1) * (J - q2 - 2)),
-               df = (K - q3 - 1) * (J - q2 - 2), lambda)
+        1 - pt(qt(1 - sig.level / tside, df = (K - q - 1)),
+               df = (K - q - 1), lambda)
       })
     }
   }

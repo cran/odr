@@ -1,6 +1,6 @@
 ---
 title: "Package 'odr'"
-author: "Zuchao Shen, Ben Kelcey"
+author: "Zuchao Shen, Benjamin Kelcey, Walter Leite"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -116,7 +116,7 @@ calculates minimum detectable effect size (i.e., d) under a fixed budget and
 desired power level; if 'm' is NULL, the function calculate
 required budget (and required sample size) to achieve desired power level to detect a treatment effect.
 
-This function also can conduct conventional power analysis or power analysis wihout 
+This function also can conduct conventional power analysis or power analysis without 
 accommodating cost structures by specifying cost.model = FALSE, the conventional
 power analyses include statistical power calculation, minimum detectable effect size calculation, 
 and required sample size calculation.

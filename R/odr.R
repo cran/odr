@@ -1,4 +1,4 @@
-#' Optimal design and statistical power of experimental studies assessing main and mediation effects
+#' Optimal Design and Statistical Power of Multilevel Randomized Trials
 #'
 #' This package is to help researchers design cost-efficient experimental studies
 #'     assessing main treatment effects
@@ -7,11 +7,11 @@
 #'     and (c) explicitly accommodating costs and budget in power analyses.
 #'
 #' The package covers seven types of experiments aiming to detect
-#'     main effects on continuous
-#'     outcomes. These experiments are
+#'     main and mediation effects. These experiments are
 #'     individual randomized controlled trials (RCTs), two-,
-#'     three-, and four-level cluster-randomized trials (CRTs), and
-#'     two-, three-, and four-level multisite randomized trials (MRTs).
+#'     three-, and four-level cluster-randomized trials (CRTs),
+#'     two-, three-, and four-level multisite randomized trials (MRTs), and
+#'     two-level CRTs investigating mediation effects with group-level mediators.
 #'     There are two categorical functions for each type of
 #'     experiments and a uniform function for all types of experiments.
 #'     The two categorical functions are
