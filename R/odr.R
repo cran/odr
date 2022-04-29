@@ -30,7 +30,7 @@
 #'
 #' @author Zuchao Shen, Ben Kelcey
 #'
-#' Maintainer: Zuchao Shen \href{mailto: zuchao.shen@gmail.com}{zuchao.shen@gmail.com}
+#' Maintainer: Zuchao Shen (zuchao.shen[at]gmail.com)
 #'
 #' @docType package
 "_PACKAGE"

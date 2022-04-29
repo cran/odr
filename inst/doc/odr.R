@@ -1,3 +1,33 @@
+## ---- echo=FALSE--------------------------------------------------------------
+df = data.frame(
+  Design = c("Simple Experiments", "2-Level CRTs", "2-Level MRTs",
+             "3-Level CRTs", "3-Level MRTs",
+             "4-Level CRTs", "4-Level MRTs"),
+  OD_Function = c("od.1", "od.2", "od.2m",
+                  "od.3", "od.3m",
+                  "od.4", "od.4m"),
+  Power_Function = c("power.1", "power.2", "power.2m",
+                     "power.3", "power.3m",
+                     "power.4", "power.4m"),
+  RE_Function = c("re", "re", "re",
+                     "re", "re",
+                     "re", "re")
+  
+)
+library(knitr)
+kable(df,
+      caption = "Functions for Designs Detecting Main Effects")
+
+## ---- echo=FALSE--------------------------------------------------------------
+df = data.frame(
+  Design = c("Simple Experiments", "2-Level CRTs", "2-Level MRTs"),
+  OD_Function = c("od.1.111", "od.2.221", "od.2m.111"),
+  Power_Function = c("power.1.111", "power.2.221", "power.2m.111")
+)
+library(knitr)
+kable(df,
+      caption = "Functions for Designs Detecting Mediation Effects (In Preparation)")
+
 ## -----------------------------------------------------------------------------
 library(odr)
 
