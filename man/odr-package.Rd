@@ -36,7 +36,8 @@ The package covers seven types of experiments aiming to detect
     with different sample allocations.
 }
 \author{
-Zuchao Shen, Ben Kelcey
+Zuchao Shen, Benjamin Kelcey
 
-Maintainer: Zuchao Shen (zuchao.shen[at]gmail.com)
+Maintainer: Zuchao Shen \href{mailto:zuchao.shen@gmail.com}{zuchao.shen@gmail.com}
+    (Arizona State University)
 }

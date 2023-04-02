@@ -157,7 +157,7 @@ od.2m <- function(n = NULL, p = NULL, icc = NULL,
     } else {
       pp[i] <- p
     }
-    n <- eval(n.expr); nn[i] <- n
+    nn[i] <- eval(n.expr); n <- nn[i]
   }
   if (!is.null(par$n) && !is.null(par$p)) {
     cat("===============================\n",

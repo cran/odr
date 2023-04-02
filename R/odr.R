@@ -28,9 +28,10 @@
 #'     the relative (precision and) efficiency between two designs
 #'     with different sample allocations.
 #'
-#' @author Zuchao Shen, Ben Kelcey
+#' @author Zuchao Shen, Benjamin Kelcey
 #'
-#' Maintainer: Zuchao Shen (zuchao.shen[at]gmail.com)
+#' Maintainer: Zuchao Shen \href{mailto:zuchao.shen@gmail.com}{zuchao.shen@gmail.com}
+#'     (Arizona State University)
 #'
 #' @docType package
 "_PACKAGE"

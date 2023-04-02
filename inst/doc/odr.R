@@ -14,6 +14,7 @@ df = data.frame(
                      "re", "re")
   
 )
+names(df) <- c("Design", "OD Function", "Power Function", "RE Function")
 library(knitr)
 kable(df,
       caption = "Functions for Designs Detecting Main Effects")
@@ -24,6 +25,7 @@ df = data.frame(
   OD_Function = c("od.1.111", "od.2.221", "od.2m.111"),
   Power_Function = c("power.1.111", "power.2.221", "power.2m.111")
 )
+names(df) <- c("Design", "OD Function", "Power Function")
 library(knitr)
 kable(df,
       caption = "Functions for Designs Detecting Mediation Effects (In Preparation)")
@@ -202,4 +204,15 @@ myre <- re(od = myod1, subod= myod4)
 # ?od.2m
 # ?od.3m
 # ?od.4m
+
+## -----------------------------------------------------------------------------
+# Optimal sample allocation and statistical power for randomized controlled trials
+myod <- od.1.111(a = .3, b = .5, c = 10, ct = 100, verbose = FALSE)
+mypower <- power.1.111(expr = myod, power = .8)
+# mypower
+
+# Conventional power analyses
+mypower <- power.1.111(cost.model = FALSE, a = .3, b = .5,
+                        power = .8, p =.5)
+# mypower
 

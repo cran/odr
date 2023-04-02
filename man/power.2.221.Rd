@@ -102,7 +102,7 @@ each treatment condition.}
 
 \item{q.b}{The number of covariates in the mediator model (except the treatment indicator).}
 
-\item{powerlim}{The range for searching the root of power (\code{power}) numerically,
+\item{powerlim}{The range for solving the root of power (\code{power}) numerically,
 default value is c(1e-10, 1 - 1e-10).}
 
 \item{Jlim}{The range for searching the root of level-2 sample size (\code{J}) numerically,

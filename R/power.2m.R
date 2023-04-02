@@ -27,6 +27,7 @@
 #' @param c2 The cost of sampling one level-2 unit.
 #' @param p The proportion of level-1 units to be assigned to treatment.
 #' @param q The number of covariates at level 2.
+#' @param J The number of sites.
 #' @param mlim The range for searching the root of budget (\code{m}) numerically,
 #'     default is the costs sampling \code{Jlim} level-2 units
 #'     or c(4 * Jcost, 1e+10 * Jcost) with Jcost =
