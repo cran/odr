@@ -14,8 +14,8 @@ od.1.111(
   r.yx = 0,
   r.mx = 0,
   r.mw = 0,
-  q.a = 1,
-  q.b = 1,
+  q.a = 0,
+  q.b = 0,
   test = "joint",
   p = NULL,
   n = NULL,
@@ -62,10 +62,10 @@ covariate(s) in the outcome model.}
 covariate(s) in the mediator model.}
 
 \item{q.a}{The number of covariates at the mediator model
-(except the treatment indicator), the default value is one.}
+(except the treatment indicator), the default value is zero.}
 
 \item{q.b}{The number of covariates in the outcome model (except the treatment
-indicator and the mediator), the default value is one.}
+indicator and the mediator), the default value is zero.}
 
 \item{test}{The type of test will be used to detect mediation effects.
 The default is the joint significance test (i.e., test = "joint",
@@ -131,7 +131,7 @@ Unconstrained or constrained optimal sample allocation \code{p}).
 \description{
 The optimal design of single-level RCTs
     probing mediation effects is to identify the optimal sample
-    allocation that use the minimum bueget to achieve a fixed level of
+    allocation that use the minimum budget to achieve a fixed level of
     statistical power. The optimal design parameter is the proportion of
     individuals/units to be assigned to the experimental condition.
     This function identifies the optimal \code{p}.

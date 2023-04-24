@@ -1,7 +1,7 @@
-ea96abe2666de8f057fefe8de5b6275a *DESCRIPTION
+899d64b755c8cca27fd434d4b33b730b *DESCRIPTION
 79274552c2aa753ead9d88aa7c02f7f6 *NAMESPACE
 d6ee4cde0556ab14171c63681e5dc4e1 *R/gen.design.pars.R
-5572d63d1b20a96a2c809b46cb6af25f *R/od.1.111.R
+6493ed0a9fe4fc8eb7cd451fab1f9275 *R/od.1.111.R
 c81dffe3a3e9f591d11ea80933fceb04 *R/od.1.R
 91f96fa01d43cffa8470a704970547d1 *R/od.2.221.R
 7cb54019edec5c2674a4e560f41b99cc *R/od.2.R
@@ -11,8 +11,8 @@ c81dffe3a3e9f591d11ea80933fceb04 *R/od.1.R
 715484ba56638c4abe13e2cd3c6e824f *R/od.3m.R
 aebbd6ea07fe01fb6715363d2d9edd94 *R/od.4.R
 38c0ed18d3f8d6d3b26983db8c5303fc *R/od.4m.R
-3c4c5d9ecee4e364f1c3a3e9188c914e *R/odr.R
-ee03903e2f6c5a772bcbb2a78515ffc7 *R/power.1.111.R
+32ef64fbc2b11e8b8e119d0955cc5a6b *R/odr.R
+db6398617308cfe8f659024ff7e22c81 *R/power.1.111.R
 5e8284d902236d1483b726ffc8a94155 *R/power.1.R
 36fdb62858bbe8538f742de640547792 *R/power.2.221.R
 c988a08c39562827d673b5077dc5df1f *R/power.2.R
@@ -24,12 +24,12 @@ d638ad6d2e53fe48085ce70524f6b50e *R/power.3m.R
 b7f816fe381a74a11f768c9c96619dab *R/power.4m.R
 eb69d8c7c744d4ffeb74cae5eeb54e82 *R/re.R
 291730d41a99b27c88a962263952a872 *R/rpe.R
-123c73ab9d410b162b3716ecc0dae1a9 *build/vignette.rds
+80e13f1eeba0f2e9f61982fda68a5e4e *build/vignette.rds
 a0163c2ec5d5c97ebbacf8bb7b86e178 *inst/doc/odr.R
-011c0d31d3b9ca49d4172e789ff5fdac *inst/doc/odr.Rmd
-696464c06e3ee05ad70bb6bddd691dc8 *inst/doc/odr.html
+146a50e9a7d1c14e5ab625549a5afaca *inst/doc/odr.Rmd
+6888259b09deb127963f1bcec5da0c81 *inst/doc/odr.html
 5d87034916add004025a9fca5e46700c *man/gen.design.pars.Rd
-4c993125bf8d5cafb38c025fa8f0ee52 *man/od.1.111.Rd
+0a2526e68cda8c5aafbde3c556c9c37d *man/od.1.111.Rd
 38f39644bbce6ab7a89e5b07572eca6f *man/od.1.Rd
 e06b714574cecd54198d0982ea418bf9 *man/od.2.221.Rd
 1d7e4867486e0e453af87764f14c9054 *man/od.2.Rd
@@ -39,8 +39,8 @@ e06b714574cecd54198d0982ea418bf9 *man/od.2.221.Rd
 8cb5b8b58a91fbe0f553965925db1a49 *man/od.3m.Rd
 7ee74aee6e935d4a1bc7788ee1bd59fa *man/od.4.Rd
 064ec858c83fa46cda92ab59608db9e9 *man/od.4m.Rd
-8bac93152f0dab4f6b3b06d3170e8eba *man/odr-package.Rd
-1de474c7793a55714be2d57f75bc48de *man/power.1.111.Rd
+28d147fbadb6a3a0a6c23fc31551649d *man/odr-package.Rd
+01581ef1ed012b7d5b42dfcc3380d364 *man/power.1.111.Rd
 5e405b9e65ca06dddc580704399ffebe *man/power.1.Rd
 1a86f9fdaf023c161b33947cc2205130 *man/power.2.221.Rd
 bcff4522369992c9294ca6652e02793b *man/power.2.Rd
@@ -52,4 +52,4 @@ b10b4135cce5ef890bc635f888b7fb60 *man/power.4.Rd
 2ee370c17cdf3b74c06b9e193cb0a21b *man/power.4m.Rd
 d8ef7c20c154ba2cc50aa729095bd522 *man/re.Rd
 62ea3b5afcb577b7b2df3798b4ee61fd *man/rpe.Rd
-011c0d31d3b9ca49d4172e789ff5fdac *vignettes/odr.Rmd
+146a50e9a7d1c14e5ab625549a5afaca *vignettes/odr.Rmd
