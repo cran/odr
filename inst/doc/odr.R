@@ -1,4 +1,4 @@
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 df = data.frame(
   Design = c("Simple Experiments", "2-Level CRTs", "2-Level MRTs",
              "3-Level CRTs", "3-Level MRTs",
@@ -19,7 +19,7 @@ library(knitr)
 kable(df,
       caption = "Functions for Designs Detecting Main Effects")
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 df = data.frame(
   Design = c("Simple Experiments", "2-Level CRTs", "2-Level MRTs"),
   OD_Function = c("od.1.111", "od.2.221", "od.2m.111"),

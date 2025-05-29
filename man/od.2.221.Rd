@@ -8,6 +8,7 @@
 od.2.221(
   a = NULL,
   b = NULL,
+  d = NULL,
   n = NULL,
   p = NULL,
   icc = NULL,
@@ -15,21 +16,25 @@ od.2.221(
   c1t = NULL,
   c2 = NULL,
   c2t = NULL,
+  r12 = NULL,
+  r22 = NULL,
   m = NULL,
   r2m = 0,
   r.yx = 0,
   r.mw = 0,
   r.yw = 0,
+  q.main = 0,
   q.a = 0,
   q.b = 0,
   test = "joint",
   tol = 1e-11,
-  power = 0.8,
+  power.med = 0.8,
+  power.main = 0.8,
   d.p = c(0.1, 0.5),
   d.n = c(2, 100),
   sig.level = 0.05,
   two.tailed = TRUE,
-  Jlim = c(max(q.a, q.b) + 4, 1e+06),
+  Jlim = NULL,
   verbose = TRUE,
   nrange = c(1.5, 10000),
   max.value = Inf,
@@ -47,6 +52,8 @@ od.2.221(
 \item{b}{The within treatment correlation between the outcome and
 the mediator at the cluster level.}
 
+\item{d}{Effect size.}
+
 \item{n}{The level-1 sample size per level-2 unit.}
 
 \item{p}{The proportion of level-2 clusters/units to be assigned to treatment.}
@@ -62,6 +69,10 @@ each treatment condition.}
 
 \item{c2t}{The cost of sampling one level-2 unit in treatment condition.}
 
+\item{r12}{The proportion of level-1 variance explained by covariates.}
+
+\item{r22}{The proportion of level-2 variance explained by covariates.}
+
 \item{m}{Total budget.}
 
 \item{r2m}{The proportion of mediator variance explained by covariates in
@@ -75,6 +86,8 @@ cluster level.}
 
 \item{r.yw}{The correlation between the outcome and the covariate at the
 cluster level.}
+
+\item{q.main}{The  number of covariates in the outcome model testing main effects}
 
 \item{q.a}{The number of covariates in the mediator model
 (except the treatment indicator).}
@@ -90,7 +103,11 @@ by specifying the argument as test = "sobel".}
 
 \item{tol}{convergence tolerance.}
 
-\item{power}{Statistical power specified. The default value is .80.}
+\item{power.med}{Statistical power specified for mediation.
+The default value is .80.}
+
+\item{power.main}{Statistical power specified for the total/main effect.
+The default value is .80.}
 
 \item{d.p}{The initial sampling domains for p. Default is c(0.1, 0.5).}
 

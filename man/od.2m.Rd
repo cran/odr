@@ -26,24 +26,43 @@ od.2m(
   vartitle = NULL,
   verbose = TRUE,
   iter = 100,
-  tol = 1e-10
+  tol = 1e-10,
+  q = 1,
+  d = 0.1,
+  power = 0.8,
+  ACO = TRUE,
+  d.p = c(0.1, 0.5),
+  d.n = c(2, 1000),
+  sig.level = 0.05,
+  two.tailed = TRUE,
+  Jlim = c(6, 1e+10),
+  nrange = c(2, 10000),
+  max.value = Inf,
+  max.iter = 300,
+  e = 1e-10,
+  n.of.ants = 10,
+  n.of.archive = 50,
+  q.aco = 1e-04,
+  xi = 0.5
 )
 }
 \arguments{
 \item{n}{The level-1 sample size per level-2 unit.}
 
-\item{p}{The proportion of level-4 clusters/units to be assigned to treatment.}
+\item{p}{The proportion of level-1 units within each level 2 unit
+to be assigned to treatment.}
 
 \item{icc}{The unconditional intraclass correlation coefficient (ICC) in population or in
 each treatment condition.}
 
 \item{r12}{The proportion of level-1 variance explained by covariates.}
 
-\item{r22m}{The proportion of variance of site-specific treatment effect explained by covariates.}
+\item{r22m}{The proportion of variance of site-specific treatment
+effect explained by covariates.}
 
 \item{c1}{The cost of sampling one level-1 unit in control condition.}
 
-\item{c2}{The cost of sampling one level-2 unit in control condition.}
+\item{c2}{The cost of sampling one level-2 unit (site).}
 
 \item{c1t}{The cost of sampling one level-1 unit in treatment condition.}
 
@@ -80,6 +99,50 @@ and \code{p} if TRUE, otherwise not; default value is TRUE.}
 \item{iter}{Number of iterations; default value is 100.}
 
 \item{tol}{Tolerance for convergence; default value is 1e-10.}
+
+\item{q}{The number of covariates at level 2. Default is 1.}
+
+\item{d}{Standardized effect size, default is 0.1.}
+
+\item{power}{Statistical power.}
+
+\item{ACO}{Logic. If TRUE, the function will use the ant colony
+optimization (ACO) algorithm to identify optimal allocations. If FALSE,
+the function will use the first-order derivative method to identify
+optimal allocations. Default is TRUE.}
+
+\item{d.p}{The initial sampling domains for p. Default is c(0.1, 0.5).}
+
+\item{d.n}{The initial sampling domain for n. Default is c(2, 1000).}
+
+\item{sig.level}{Significance level or type I error rate, default value is 0.05.}
+
+\item{two.tailed}{Logical; two-tailed tests if TRUE,
+otherwise one-tailed tests; default value is TRUE.}
+
+\item{Jlim}{The range for solving the root of level-2 sample size
+(\code{J}) numerically, default value is c(6, 1e+10).}
+
+\item{nrange}{The range of the level-1 sample size per level-2 unit
+that used to exclude unreasonable values. Default value is c(2, 10000).}
+
+\item{max.value}{Maximal value of optimization when used as
+the stopping criterion. Default is -Inf.}
+
+\item{max.iter}{Maximal number of function evaluations when used as
+the stopping criterion.}
+
+\item{e}{Maximum error value used when solution quality used as
+the stopping criterion, default is 1e-10.}
+
+\item{n.of.ants}{Number of ants used in each iteration after the initialization
+of power analysis for calculating required budget, default value is 10.}
+
+\item{n.of.archive}{Size of the solution archive, default is 100.}
+
+\item{q.aco}{Locality of the ACO search (0,1), default is 0.0001.}
+
+\item{xi}{Convergence pressure (0, Inf), suggested: (0, 1), default is 0.5.}
 }
 \value{
 Unconstrained or constrained optimal sample allocation
@@ -91,9 +154,11 @@ Unconstrained or constrained optimal sample allocation
 \description{
 The optimal design of two-level
     multisite randomized trials (MRTs) detecting main effects is to calculate
-    the sample allocation that minimizes the variance of a
-    treatment effect under a fixed budget, which is approximately the optimal
-    sample allocation that maximizes statistical power under a fixed budget.
+    the optimal sample allocation that minimize the budget to achieve a
+    fixed statistical power (e.g., 80%) using the ant colony optimization (ACO)
+    algorithm. Alternatively, the function can calculate the allocation that
+    minimizes the variance of a treatment effect under a fixed budget,
+    which is less precise than the ACO algorithm.
     The optimal design parameters include
     the level-one sample size per site (\code{n})
     and the proportion of level-one unit to be assigned to treatment (\code{p}).
@@ -105,12 +170,7 @@ The optimal design of two-level
   myod1 <- od.2m(icc = 0.2, omega = 0.02, r12 = 0.5, r22m = 0.5,
               c1 = 1, c2 = 10, c1t = 10,
               varlim = c(0, 0.005))
-  myod1$out # n = 20, p =0.37
-# Plots by p
-  myod1 <- od.2m(icc = 0.2, omega = 0.02,
-              r12 = 0.5, r22m = 0.5,
-              c1 = 1, c2 = 10, c1t = 10,
-              varlim = c(0, 0.005), plot.by = list(p = 'p'))
+  myod1$out
 
 # Constrained optimal design with p = 0.5 #---------
   myod2 <- od.2m(icc = 0.2, omega = 0.02,
@@ -120,7 +180,7 @@ The optimal design of two-level
   myod2$out
 # Relative efficiency (RE)
   myre <- re(od = myod1, subod= myod2)
-  myre$re # RE = 0.86
+  myre$re # RE = 0.81
 
 # Constrained optimal design with n = 5 #---------
   myod3 <- od.2m(icc = 0.2, omega = 0.02,
@@ -129,7 +189,7 @@ The optimal design of two-level
   myod3$out
 # Relative efficiency (RE)
   myre <- re(od = myod1, subod= myod3)
-  myre$re # RE = 0.79
+  myre$re # RE = 0.78
 
 # Constrained n and p, no calculation performed #---------
   myod4 <- od.2m(icc = 0.2, omega = 0.02, r12 = 0.5, r22m = 0.5,
@@ -138,12 +198,12 @@ The optimal design of two-level
   myod4$out
 # Relative efficiency (RE)
   myre <- re(od = myod1, subod= myod4)
-  myre$re # RE = 0.84
+  myre$re # RE = 0.79
 
 }
 \references{
-Shen, Z., & Kelcey, B. (in press). Optimal sample
+Shen, Z., & Kelcey, B. (2022). Optimal sample
    allocation in multisite randomized trials.
-   The Journal of Experimental Education.
+   The Journal of Experimental Education, 90(3), 693-711.
    <https://doi.org/10.1080/00220973.2020.1830361>
 }
