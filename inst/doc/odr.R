@@ -30,6 +30,17 @@ library(knitr)
 kable(df,
       caption = "Functions for Designs Detecting Mediation Effects (In Preparation)")
 
+## ----echo=FALSE---------------------------------------------------------------
+df = data.frame(
+  Design = c("Simple Experiments", "2-Level CRTs", "2-Level MRTs"),
+  OD_Function = c("od.1.111m", "od.2.221m", "od.2m.111m"),
+  Power_Function = c("power.1.111m", "power.2.221m", "power.2m.111m")
+)
+names(df) <- c("Design", "OD Function", "Power Function")
+library(knitr)
+kable(df,
+      caption = "Functions for Designs Detecting Moderation Effects (In Preparation)")
+
 ## -----------------------------------------------------------------------------
 library(odr)
 

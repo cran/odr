@@ -30,12 +30,12 @@ od.2m(
   q = 1,
   d = 0.1,
   power = 0.8,
-  ACO = TRUE,
+  aco = TRUE,
   d.p = c(0.1, 0.5),
   d.n = c(2, 1000),
   sig.level = 0.05,
   two.tailed = TRUE,
-  Jlim = c(6, 1e+10),
+  Jlim = c(2.5, 1e+10),
   nrange = c(2, 10000),
   max.value = Inf,
   max.iter = 300,
@@ -106,7 +106,7 @@ and \code{p} if TRUE, otherwise not; default value is TRUE.}
 
 \item{power}{Statistical power.}
 
-\item{ACO}{Logic. If TRUE, the function will use the ant colony
+\item{aco}{Logic. If TRUE, the function will use the ant colony
 optimization (ACO) algorithm to identify optimal allocations. If FALSE,
 the function will use the first-order derivative method to identify
 optimal allocations. Default is TRUE.}
@@ -121,7 +121,10 @@ optimal allocations. Default is TRUE.}
 otherwise one-tailed tests; default value is TRUE.}
 
 \item{Jlim}{The range for solving the root of level-2 sample size
-(\code{J}) numerically, default value is c(6, 1e+10).}
+(\code{J}) numerically. Change the default values to a larger range
+(e.g., starting with a smaller value) if
+f() values at end points are not of opposite sign. For example,
+use Jlim = c(1.5, 1e10).}
 
 \item{nrange}{The range of the level-1 sample size per level-2 unit
 that used to exclude unreasonable values. Default value is c(2, 10000).}
