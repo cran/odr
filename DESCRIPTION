@@ -2,8 +2,8 @@ Package: odr
 Type: Package
 Title: Optimal Design and Statistical Power for Experimental Studies
         Investigating Main, Mediation, and Moderation Effects
-Version: 1.6.3
-Date: 2025-8-4
+Version: 1.7.3
+Date: 2025-10-31
 Authors@R: c(person(given = "Zuchao", 
                     family = "Shen", 
                     email = "zuchao.shen@gmail.com", 
@@ -53,9 +53,9 @@ RoxygenNote: 7.3.2
 Suggests: rmarkdown, knitr, markdown
 VignetteBuilder: rmarkdown, knitr, markdown
 NeedsCompilation: no
-Packaged: 2025-08-04 21:35:34 UTC; zucha
+Packaged: 2025-10-31 16:41:35 UTC; zucha
 Author: Zuchao Shen [aut, cre] (ORCID: <https://orcid.org/0000-0003-3483-0451>),
   Benjamin Kelcey [aut]
 Maintainer: Zuchao Shen <zuchao.shen@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-08-20 20:20:10 UTC
+Date/Publication: 2025-10-31 17:00:03 UTC

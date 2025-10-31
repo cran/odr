@@ -1,5 +1,5 @@
-d2b973c3e5bc802832e0d00256a9e464 *DESCRIPTION
-a8576b0e2c4169f0a8f6089d5d248422 *NAMESPACE
+3d01ecbe75eeaaac29f85da42c3c85b1 *DESCRIPTION
+99ccd44817f14adbf5b2862209308061 *NAMESPACE
 b731d46f3d18029e047c97d205f6fd85 *R/gen.design.pars.R
 65cc8313a0615de0943f2fba9c86fc6a *R/od.1.111.R
 8c275a4b6ebfbec3df4fbdd9780dd730 *R/od.1.111m.R
@@ -8,6 +8,7 @@ c81dffe3a3e9f591d11ea80933fceb04 *R/od.1.R
 30e6edf8e35117abf260173e640b3ad8 *R/od.2.221m.R
 7cb54019edec5c2674a4e560f41b99cc *R/od.2.R
 7b0a73872b524f3936f4bb767664c459 *R/od.2m.111.R
+f3199ac865bb52d5f7b7ed312dc9855c *R/od.2m.111m.R
 ec530b17d350b2620562c1f04220c2fa *R/od.2m.R
 6c3d091f26e41498c96c260920175016 *R/od.2m.mod.R
 a3b9035c665bb8bbb55c0f64ae6fed95 *R/od.2m.only.mod.R
@@ -16,13 +17,14 @@ a3b9035c665bb8bbb55c0f64ae6fed95 *R/od.2m.only.mod.R
 aebbd6ea07fe01fb6715363d2d9edd94 *R/od.4.R
 8390e96ef5e86432ce09e1590fced63f *R/od.4m.R
 32ef64fbc2b11e8b8e119d0955cc5a6b *R/odr.R
-04e1010f9392e57e1130a0acdb592dc8 *R/plot.power.R
+c2dc0f75083de21d8b31a0d826446a8c *R/plot.power.R
 e737a88ef305818a78cb7540c03b043f *R/power.1.111.R
 f0c073acdcfccd3e1e2512604bb057a0 *R/power.1.111m.R
 14c360779f9a59955f00d3bd51e8a306 *R/power.1.R
 7ff7804c10dd2ad2a912e3face53307d *R/power.2.221.R
 c988a08c39562827d673b5077dc5df1f *R/power.2.R
 69f88f1eca1177ae1a0ad6f6bb1be65f *R/power.2m.111.R
+50aec23e71c878bc3732b9ae971c0ce9 *R/power.2m.111m.R
 1027f9891278e586f9b88fe5230abee2 *R/power.2m.R
 c5c7db313e30c011954d39bc65ccaab0 *R/power.2m.mod.R
 175998f7f4b4eacfae5d1d1c0eb90a1a *R/power.3.R
@@ -32,9 +34,9 @@ b4ac42c80e8ec729222dffeed4f9d2bb *R/power.4m.R
 f0272d842dfb7ddccbbf8697281db546 *R/re.R
 2378d6c5d1cc3e144b4525a3e0ae67e9 *R/rpe.R
 67fc44b4d87d455f014c64168935ab7d *build/vignette.rds
-070eb6a983e69a642b048c9eeeaf42c8 *inst/doc/odr.R
-44140920ed359c3630e8d5e272d75705 *inst/doc/odr.Rmd
-88fdf542c5f7fff6fb676e2a6a4ef2a5 *inst/doc/odr.html
+c442c55bd40bc934b3a6d91391926fcd *inst/doc/odr.R
+8417d53a8d0bf70f9b006e65ac8c3767 *inst/doc/odr.Rmd
+85caf25d838856df3815a923d8f63132 *inst/doc/odr.html
 ef9faaa8d6136d75a28537fa7d86245b *man/gen.design.pars.Rd
 c3610091c8d41f7b18bfd715cd4d7fe9 *man/od.1.111.Rd
 6e489ccbcf231c1f42eb3079a8f06f7e *man/od.1.111m.Rd
@@ -43,6 +45,7 @@ c8c14ded943979a1a555611e090d3e02 *man/od.2.221.Rd
 71b4270f025753816f1148a4d7231176 *man/od.2.221m.Rd
 1d7e4867486e0e453af87764f14c9054 *man/od.2.Rd
 a4ee20810bebb795a2642c597c561589 *man/od.2m.111.Rd
+026bb7f959856cf803ba47e2b495704a *man/od.2m.111m.Rd
 85344d97b2f848beca55f97fd019231b *man/od.2m.Rd
 b9e75d648b73bcf0faed92bfced05a64 *man/od.2m.mod.Rd
 7c61b145fe729f80d68e775c01c6f139 *man/od.2m.only.mod.Rd
@@ -51,13 +54,14 @@ f24c3378c9ccef01a5b0d25f975b59ab *man/od.3m.Rd
 7ee74aee6e935d4a1bc7788ee1bd59fa *man/od.4.Rd
 08df1a028260756c83d9e71516e6d436 *man/od.4m.Rd
 28d147fbadb6a3a0a6c23fc31551649d *man/odr-package.Rd
-2b0fa7ca80e39417d02a6ceed97161a1 *man/plot.power.Rd
+95a854d4a862729fa0170417c46c5c7b *man/plot.power.Rd
 2b08e201c174798bf25eaab7592a07cf *man/power.1.111.Rd
 87ff8f9c984078facea29911a7701e4e *man/power.1.111m.Rd
 8b2b48a1a685f1493e0034cf450dc43b *man/power.1.Rd
 03a0ae0d0c53194100347decd0e3b07a *man/power.2.221.Rd
 bcff4522369992c9294ca6652e02793b *man/power.2.Rd
 ad8d54f2c9ed2c4255a4de54af556262 *man/power.2m.111.Rd
+9b940ed89d3ed2d7ca43ecc3c56d888d *man/power.2m.111m.Rd
 d69b29ec2f61212bb235993705033edb *man/power.2m.Rd
 73d976df44a28b4ffdb13374d28c8ba8 *man/power.2m.mod.Rd
 3b53d452981c62c5683738900884b383 *man/power.3.Rd
@@ -66,4 +70,4 @@ b10b4135cce5ef890bc635f888b7fb60 *man/power.4.Rd
 b558fe208dea653f849c3979ac803c27 *man/power.4m.Rd
 a014370d9cd5551e3fe59f059b77e592 *man/re.Rd
 355765b93e5f0782c15277acc70e3a15 *man/rpe.Rd
-44140920ed359c3630e8d5e272d75705 *vignettes/odr.Rmd
+8417d53a8d0bf70f9b006e65ac8c3767 *vignettes/odr.Rmd
